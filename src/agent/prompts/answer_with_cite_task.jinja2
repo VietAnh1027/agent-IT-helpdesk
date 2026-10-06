@@ -1,0 +1,2 @@
+{# User message. Required: ticket_subject, ticket_body, category, supplied_knowledge (source/content pairs). #}
+{{ {"subject": ticket_subject, "body": ticket_body, "category": category, "supplied_knowledge": kb_contexts} | tojson(indent=2) }}

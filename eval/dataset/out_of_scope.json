@@ -1,0 +1,282 @@
+[
+  {
+    "id": "TC_SYNC_027",
+    "category": "MAIL",
+    "query_type": "out_of_domain",
+    "question": "Bên mình cần mua thêm 20 gói license Office 365 Business Standard thì giá ưu đãi là bao nhiêu?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Dong_bo_email_outlook.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SYNC_028",
+    "category": "MAIL",
+    "query_type": "out_of_domain",
+    "question": "Màn hình laptop của mình bị sọc xanh chớp giật liên tục, IT qua kiểm tra giúp với.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Dong_bo_email_outlook.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SYNC_029",
+    "category": "MAIL",
+    "query_type": "out_of_domain",
+    "question": "Tôi quên mật khẩu tài khoản đăng nhập Windows của máy tính bàn, IT reset giúp tôi được không?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Dong_bo_email_outlook.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SYNC_030",
+    "category": "MAIL",
+    "query_type": "out_of_domain",
+    "question": "Cho em xin thủ tục bàn giao máy tính khi nhân viên nghỉ việc tại công ty.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Dong_bo_email_outlook.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PRT_027",
+    "category": "PRINTER",
+    "query_type": "out_of_domain",
+    "question": "IT cấp cho phòng Marketing thêm một máy chiếu và màn chiếu di động để họp khách hàng được không?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Loi_May_In.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PRT_028",
+    "category": "PRINTER",
+    "query_type": "out_of_domain",
+    "question": "Nhờ IT cài giúp tôi phần mềm Adobe Photoshop và AutoCAD bản quyền trên máy tính làm việc.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Loi_May_In.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PRT_029",
+    "category": "PRINTER",
+    "query_type": "out_of_domain",
+    "question": "Tài khoản chấm công vân tay của tôi bị khóa sáng nay, nhờ IT mở lại giúp tôi với.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Loi_May_In.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PRT_030",
+    "category": "PRINTER",
+    "query_type": "out_of_domain",
+    "question": "Cho mình hỏi định mức xin cấp phát văn phòng phẩm (bút, sổ tay, kẹp ghim) hàng tháng lấy ở đâu?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Loi_May_In.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SFT_027",
+    "category": "SOFTWARE",
+    "query_type": "out_of_domain",
+    "question": "Máy in ở tầng 2 đang bị kẹt giấy và nháy đèn đỏ liên tục, IT lên sửa giúp phòng mình với.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Phan_mem.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SFT_028",
+    "category": "SOFTWARE",
+    "query_type": "out_of_domain",
+    "question": "Hộp thư Outlook của tôi báo Disconnected và không nhận được email mới từ hôm qua đến giờ.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Phan_mem.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SFT_029",
+    "category": "SOFTWARE",
+    "query_type": "out_of_domain",
+    "question": "Bàn phím laptop của tôi bị liệt mấy phím số và phím cách, bên IT có sẵn bàn phím đổi cho tôi không?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Phan_mem.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_SFT_030",
+    "category": "SOFTWARE",
+    "query_type": "out_of_domain",
+    "question": "Tôi muốn xin nghỉ phép năm 2 ngày vào tuần sau thì làm thủ tục phê duyệt trên phần mềm nào?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Phan_mem.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PWD_027",
+    "category": "PASSWORD",
+    "query_type": "out_of_domain",
+    "question": "Máy in tầng 3 bị kẹt giấy liên tục không in được hợp đồng, IT qua xử lý giúp phòng mình nhé.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PWD_028",
+    "category": "PASSWORD",
+    "query_type": "out_of_domain",
+    "question": "Tôi muốn xin cấp license phần mềm Adobe Illustrator trên ITSM Portal thì thủ tục duyệt như thế nào?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PWD_029",
+    "category": "PASSWORD",
+    "query_type": "out_of_domain",
+    "question": "Ứng dụng Outlook của em bị hiện chữ Disconnected ở góc dưới màn hình không gửi được thư.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_PWD_030",
+    "category": "PASSWORD",
+    "query_type": "out_of_domain",
+    "question": "Máy tính của tôi bật nguồn quạt quay nhưng màn hình không lên, IT cử người xuống kiểm tra giúp.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_VPN_027",
+    "category": "VPN",
+    "query_type": "out_of_domain",
+    "question": "Máy in phòng họp tầng 2 bị kẹt giấy và báo lỗi Paper Jam, IT qua kéo giấy ra giúp với.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "VPN_Connection.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_VPN_028",
+    "category": "VPN",
+    "query_type": "out_of_domain",
+    "question": "Tôi quên mật khẩu vào xem phiếu lương trên HRPortal thì tự lấy lại mật khẩu thế nào?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "VPN_Connection.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_VPN_029",
+    "category": "VPN",
+    "query_type": "out_of_domain",
+    "question": "Hộp thư Outlook của tôi cứ 5 phút lại hiện pop-up bắt nhập mật khẩu dù đã gõ đúng pass.",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "VPN_Connection.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  },
+  {
+    "id": "TC_VPN_030",
+    "category": "VPN",
+    "query_type": "out_of_domain",
+    "question": "Phòng Marketing muốn xin cấp thêm license bản quyền Adobe Premiere thì tạo request ở đâu?",
+    "ground_truth_answer": null,
+    "ground_truth_contexts": [
+      {
+        "source_doc": "VPN_Connection.pdf",
+        "evidence_text": ""
+      }
+    ],
+    "human_handoff": true
+  }
+]

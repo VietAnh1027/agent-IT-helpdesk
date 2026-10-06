@@ -421,371 +421,371 @@
   },
   {
     "id": "TC_PRT_001",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy tính của mình không tìm thấy máy in của tầng 3, phải làm sao để kết nối lại?",
     "ground_truth_answer": "Kiểm tra máy tính đã kết nối đúng mạng nội bộ/VPN chưa. Sau đó vào Software Center tìm driver theo tên phòng/tầng (ví dụ: Printer_T3_HP_M528) để cài đặt lại.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Kiểm tra máy tính đã kết nối mạng công ty (Wi-Fi nội bộ hoặc VPN nếu làm việc từ xa).\n2 Vào Control Panel > Devices and Printers, kiểm tra máy in có xuất hiện trong danh sách không.\n3 Nếu không thấy: mở Software Center, tìm driver máy in theo tên phòng/tầng (VD:\nPrinter_T3_HP_M528) và cài đặt lại."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_002",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Làm việc từ xa qua VPN có kết nối được tới Print Server PRT01 để in không?",
     "ground_truth_answer": "Có, cần đảm bảo máy tính đã bật kết nối VPN công ty và đã cài driver máy in qua Software Center.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Kiểm tra máy tính đã kết nối mạng công ty (Wi-Fi nội bộ hoặc VPN nếu làm việc từ xa)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_003",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy in có trong Devices and Printers nhưng bấm in báo lỗi không tìm thấy thiết bị, xử lý thế nào?",
     "ground_truth_answer": "Nhấp chuột phải vào máy in, chọn Remove device, khởi động lại máy tính rồi cài đặt lại driver tương ứng từ Software Center.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 Nếu đã có trong danh sách nhưng vẫn báo lỗi: nhấp chuột phải vào máy in, chọn \"Remove device\", khởi\nđộng lại máy tính rồi cài lại từ Software Center."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_004",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Làm sao để kiểm tra máy in mạng còn hoạt động trên hệ thống hay không bằng lệnh Command Prompt?",
     "ground_truth_answer": "Xem địa chỉ IP trên tem dán tại máy in, mở Command Prompt và chạy lệnh ping <địa chỉ IP máy in> để kiểm tra phản hồi.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "5 Ping thử địa chỉ IP máy in (xem trên tem dán tại máy in) qua Command Prompt bằng lệnh \"ping \" để\nxác nhận máy in còn hoạt động trên mạng."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_005",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy in phòng kế toán báo kẹt giấy (Paper Jam), các bước gỡ giấy an toàn như thế nào?",
     "ground_truth_answer": "Tắt nguồn máy in, chờ 10 giây; mở nắp sau và khay giấy; nhẹ nhàng kéo giấy kẹt từ trong ra ngoài theo chiều di chuyển của giấy, tránh kéo ngược; kiểm tra không còn mảnh vụn rồi đóng chặt nắp và bật lại máy in.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Tắt máy in (nhấn nút nguồn), chờ 10 giây trước khi thao tác để đảm bảo an toàn.\n2 Mở nắp sau và khay giấy theo hướng dẫn dán trên thân máy in.\n3 Nhẹ nhàng kéo giấy bị kẹt theo chiều giấy di chuyển (thường là từ trong ra ngoài), tránh kéo ngược làm\nrách giấy.\n\n4 Kiểm tra kỹ không còn mảnh giấy nhỏ sót lại bên trong khay hoặc trục cuốn giấy. 5 Đóng lại nắp và\nkhay giấy, đảm bảo nghe tiếng \"cạch\" xác nhận đã đóng khít.\n6 Bật lại máy in và in thử 1 trang kiểm tra (test page) từ menu máy in hoặc từ máy tính."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_006",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Tôi đã rút hết giấy kẹt ra rồi nhưng máy in vẫn báo Paper Jam liên tục thì làm sao?",
     "ground_truth_answer": "Kiểm tra kỹ xem giấy có bị ẩm, cong hoặc sai định lượng không, thay bằng giấy mới chuẩn 70-80 gsm. Nếu vẫn báo lỗi, tạo ticket cho IT Helpdesk và không tự ý tháo mở linh kiện bên trong.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "7 Nếu máy in báo kẹt giấy liên tục dù đã lấy hết giấy: kiểm tra giấy có bị ẩm, cong hoặc không đúng định\nlượng khuyến nghị (70-80 gsm) không; thay bằng giấy mới.\n8 Nếu lỗi vẫn lặp lại, tạo ticket báo lỗi phần cứng cho IT Helpdesk, không tự tháo các bộ phận bên trong."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_007",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Loại giấy in tiêu chuẩn khuyến nghị dùng cho máy in văn phòng là bao nhiêu gsm để tránh kẹt giấy?",
     "ground_truth_answer": "Định lượng giấy khuyến nghị là 70-80 gsm và phải đảm bảo giấy khô ráo, không bị ẩm hoặc cong mép.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "kiểm tra giấy có bị ẩm, cong hoặc không đúng định\nlượng khuyến nghị (70-80 gsm) không; thay bằng giấy mới."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_008",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Sau khi cập nhật Windows thì máy tính không in được, kiểm tra driver ở đâu?",
     "ground_truth_answer": "Vào Control Panel > Devices and Printers, nhấp chuột phải vào máy in chọn Printer properties để đối chiếu model. Nếu sai hoặc lỗi driver, gỡ bỏ qua Settings > Apps & features rồi cài lại từ Software Center.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Vào Control Panel > Devices and Printers, nhấp chuột phải vào máy in bị lỗi, chọn \"Printer properties\"\nđể kiểm tra đúng model đang cài.\n2 Nếu sai model: gỡ máy in hiện tại (Remove device) và cài lại đúng driver qua Software Center.\n3 Nếu đúng model nhưng vẫn lỗi: mở Settings > Apps > Apps & features, tìm driver máy in, chọn\n\"Uninstall\", khởi động lại máy tính.\n4 Cài lại driver mới nhất từ Software Center"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_009",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Tôi có được tự lên mạng tải driver máy in HP/Canon về cài không?",
     "ground_truth_answer": "Không tự tải driver từ website ngoài để tránh xung đột bảo mật. Nhân viên chỉ cài đặt các gói driver chính thức đã được IT cập nhật trên Software Center.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "Cài lại driver mới nhất từ Software Center (driver được IT cập nhật định kỳ, không tự tải từ website\nngoài để tránh xung đột bảo mật)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_010",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Làm thế nào để gỡ sạch driver máy in cũ bị lỗi trên Windows?",
     "ground_truth_answer": "Mở Settings > Apps > Apps & features, tìm tên driver máy in cần xóa, nhấn Uninstall, sau đó khởi động lại máy tính trước khi cài lại bản mới.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Nếu đúng model nhưng vẫn lỗi: mở Settings > Apps > Apps & features, tìm driver máy in, chọn\n\"Uninstall\", khởi động lại máy tính."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_011",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy in ở trạng thái Offline màu xám, làm sao để chuyển sang chế độ Online?",
     "ground_truth_answer": "Kiểm tra nguồn máy in; vào Control Panel > Devices and Printers, nhấp chuột phải vào máy in và bỏ tích chọn mục 'Use Printer Offline'.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Kiểm tra máy in vật lý có đang bật nguồn và có đèn báo lỗi nhấp nháy không.\n2 Vào Control Panel > Devices and Printers, nhấp chuột phải vào máy in, bỏ chọn \"Use Printer Offline\"\nnếu tùy chọn này đang được bật."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_012",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Cách restart dịch vụ Print Spooler khi máy in bị offline hoặc đơ không in được?",
     "ground_truth_answer": "Mở hộp thoại Run gõ services.msc, tìm dịch vụ có tên 'Print Spooler', nhấp chuột phải và chọn 'Restart'.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Khởi động lại dịch vụ Print Spooler: mở Services (services.msc), tìm \"Print Spooler\", chọn \"Restart\"."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_013",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy in vẫn báo Offline dù đã bỏ tích Use Printer Offline và restart spooler thì kiểm tra gì tiếp?",
     "ground_truth_answer": "Kiểm tra lại kết nối vật lý (cáp mạng LAN cắm chặt hoặc đèn Wi-Fi máy in sáng), sau đó khởi động lại máy in vật lý và thử in lại sau 2 phút.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 Kiểm tra lại kết nối mạng của máy in (dây LAN cắm chắc hoặc Wi-Fi máy in còn hoạt động).\n5 Nếu vẫn offline sau các bước trên, khởi động lại máy in và thử in lại sau 2 phút."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_014",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Hàng đợi in (Print Queue) bị kẹt một tài liệu không in được, làm sao để xóa đi?",
     "ground_truth_answer": "Vào Devices and Printers, nhấp đúp vào máy in để mở hàng đợi, nhấp chuột phải vào tài liệu bị treo chọn 'Cancel' hoặc chọn 'Cancel All Documents'.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Mở Control Panel > Devices and Printers, nhấp đúp vào máy in để xem hàng đợi in (print queue).\n\n2 Chọn lệnh in bị treo, nhấn \"Cancel\" để hủy; nếu không hủy được, chọn \"Cancel All Documents\"."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_015",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Bấm Cancel tài liệu in bị treo mãi ở trạng thái Deleting mà không mất hẳn thì làm thế nào?",
     "ground_truth_answer": "Mở Services (services.msc), tìm dịch vụ Print Spooler, bấm Stop (dừng) dịch vụ rồi bấm Start/Restart lại để giải phóng hoàn toàn hàng đợi bị kẹt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Nếu hàng đợi vẫn không xóa được: mở Services (services.msc), dừng dịch vụ \"Print Spooler\", sau đó\nkhởi động lại dịch vụ này."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_016",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Bản in ra giấy bị mờ chữ hoặc xuất hiện các vệt sọc trắng dọc trang giấy là bị làm sao?",
     "ground_truth_answer": "Do mực/toner sắp hết hoặc đầu in/trống mực bị bẩn. Cần kiểm tra mức mực trên màn hình máy in, chạy chức năng 'Cleaning' hoặc 'Maintenance' từ menu máy in.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Kiểm tra mức mực/toner trên màn hình điều khiển của máy in, thay hộp mực nếu sắp hết.\n2 Vào menu máy in, chọn chức năng \"Cleaning\" hoặc \"Maintenance\" để làm sạch đầu in/trống mực."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_017",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Đã chạy lệnh Cleaning trên máy in rồi nhưng trang in test vẫn bị sọc đen và lem mực thì xử lý sao?",
     "ground_truth_answer": "Tạo ticket báo lỗi phần cứng cho IT Helpdesk vì máy có thể đã bị hỏng trống mực (drum) hoặc hỏng cụm sấy (fuser) cần kỹ thuật viên thay thế.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 In lại trang test; nếu lỗi vẫn còn sau khi vệ sinh, tạo ticket báo lỗi phần cứng cho IT Helpdesk vì có thể\ncần thay trống mực (drum) hoặc bộ phận sấy (fuser)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_018",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Hộp mực vừa mới thay nhưng máy in vẫn nhấp nháy đèn báo lỗi Toner Empty / No Toner?",
     "ground_truth_answer": "Tháo hộp mực ra, kiểm tra đã bóc hết seal niêm phong chưa, lắc ngang nhẹ 5-6 lần, dùng khăn khô sạch lau nhẹ chip tiếp xúc và lắp chặt lại đúng chiều.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Tháo hộp mực ra, lắc nhẹ theo chiều ngang 5-6 lần để mực phân bố đều, sau đó lắp lại đúng chiều.\n2 Kiểm tra đã bóc hết lớp niêm phong (seal tape) trên hộp mực mới chưa.\n3 Lau nhẹ các chip tiếp xúc (contact chip) trên hộp mực bằng khăn khô sạch.\n4 Khởi động lại máy in sau khi lắp lại hộp mực."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_019",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Vệ sinh chip tiếp xúc của hộp mực máy in bằng cách nào đúng kỹ thuật?",
     "ground_truth_answer": "Dùng một miếng khăn khô sạch lau nhẹ nhàng lên bề mặt các chân chip đồng (contact chip) trên hộp mực, tránh để dính nước hoặc hóa chất.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Lau nhẹ các chip tiếp xúc (contact chip) trên hộp mực bằng khăn khô sạch."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_020",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Đã lau chip và lắc hộp mực mới nhưng máy in vẫn báo không nhận mực thì làm gì tiếp theo?",
     "ground_truth_answer": "Hộp mực mới có thể bị lỗi nhà sản xuất hoặc không tương thích; cần liên hệ IT Helpdesk để được kiểm tra và đổi hộp mực khác.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "5 Nếu vẫn báo lỗi, có thể hộp mực không tương thích hoặc lỗi từ nhà sản xuất; báo IT Helpdesk để đổi\nhộp mực khác."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_021",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Máy in phát ra tiếng kêu cạch cạch bất thường và có mùi khét nhẹ, người dùng có nên mở ra kiểm tra không?",
     "ground_truth_answer": "Tuyệt đối không tự tháo mở linh kiện bên trong. Cần tắt nguồn ngay lập tức và gửi ticket/gọi hotline IT Helpdesk xử lý sự cố phần cứng khẩn cấp.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "• Máy in phát ra tiếng động lạ, có mùi khét hoặc có dấu hiệu chập điện.\n• Cần thay thế linh kiện bên trong (trống mực, fuser, board mạch) — không tự tháo lắp."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_022",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Tất cả nhân viên ở tầng 4 đều không gửi được lệnh in cùng lúc thì nguyên nhân do đâu?",
     "ground_truth_answer": "Đây là dấu hiệu sự cố liên quan đến hệ thống Print Server PRT01 hoặc thiết bị mạng dùng chung; cần báo ngay cho IT Helpdesk để kiểm tra hạ tầng máy chủ in.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "• Lỗi liên quan đến toàn bộ print server (nhiều người cùng tầng không in được cùng lúc)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_023",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Email và hotline của IT Service Desk để tiếp nhận ticket lỗi máy in là gì?",
     "ground_truth_answer": "Email tiếp nhận: itservicedesk@company.com; Hotline nội bộ: 1900-yyy (hoạt động từ 8:00 - 17:30, Thứ 2 đến Thứ 6).",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "IT Service Desk: itservicedesk@company.com | Hotline nội bộ: 1900-yyy (giờ hành chính, Thứ 2 - Thứ 6, 8:00 -\n17:30)"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_024",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Khi gửi ticket báo lỗi máy in cho IT cần cung cấp những thông tin cụ thể nào?",
     "ground_truth_answer": "Cần ghi rõ tên/mã máy in (xem trên tem dán ở thân máy), vị trí phòng/tầng, mô tả chi tiết lỗi và đính kèm ảnh chụp màn hình thông báo lỗi (nếu có).",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "Khi tạo ticket, vui lòng ghi rõ tên/mã máy in (dán trên thân máy) và mô tả lỗi kèm ảnh chụp màn hình\nnếu có."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_025",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Người dùng văn phòng có được tự mua cụm sấy hoặc trống mực về thay cho máy in công ty không?",
     "ground_truth_answer": "Không. Việc thay thế linh kiện bên trong (trống mực, cụm sấy fuser, board mạch) thuộc thẩm quyền của IT Helpdesk, nhân viên không được tự ý tháo lắp.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "• Cần thay thế linh kiện bên trong (trống mực, fuser, board mạch) — không tự tháo lắp."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_026",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "in_domain_single_hop",
     "question": "Tên hệ thống Print Server quản lý máy in chung toàn công ty là gì?",
     "ground_truth_answer": "Hệ thống máy in dùng chung nội bộ được quản lý tập trung bởi Print Server PRT01.",
     "ground_truth_contexts": [
       {
         "source_doc": "Loi_May_In.pdf",
-        "evidence_text": ""
+        "evidence_text": "Print Server PRT01 quản lý toàn bộ máy in mạng dùng chung tại các tầng văn phòng."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_PRT_027",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "out_of_domain",
     "question": "IT cấp cho phòng Marketing thêm một máy chiếu và màn chiếu di động để họp khách hàng được không?",
     "ground_truth_answer": null,
@@ -799,7 +799,7 @@
   },
   {
     "id": "TC_PRT_028",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "out_of_domain",
     "question": "Nhờ IT cài giúp tôi phần mềm Adobe Photoshop và AutoCAD bản quyền trên máy tính làm việc.",
     "ground_truth_answer": null,
@@ -813,7 +813,7 @@
   },
   {
     "id": "TC_PRT_029",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "out_of_domain",
     "question": "Tài khoản chấm công vân tay của tôi bị khóa sáng nay, nhờ IT mở lại giúp tôi với.",
     "ground_truth_answer": null,
@@ -827,7 +827,7 @@
   },
   {
     "id": "TC_PRT_030",
-    "category": "MAY_IN",
+    "category": "PRINTER",
     "query_type": "out_of_domain",
     "question": "Cho mình hỏi định mức xin cấp phát văn phòng phẩm (bút, sổ tay, kẹp ghim) hàng tháng lấy ở đâu?",
     "ground_truth_answer": null,
@@ -841,371 +841,371 @@
   },
   {
     "id": "TC_SFT_001",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Tôi muốn cài đặt phần mềm Adobe Photoshop phục vụ thiết kế thì truy cập vào đường link nào để đăng ký?",
     "ground_truth_answer": "Truy cập cổng ITSM Portal tại địa chỉ itsm.company.com bằng tài khoản HRPortal, sau đó vào mục 'Software Catalog' để tạo yêu cầu cài đặt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Truy cập ITSM Portal tại itsm.company.com bằng tài khoản HRPortal.\n2 Vào mục \"Software Catalog\" để tra cứu phần mềm cần dùng."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_002",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Tìm trong Software Catalog không có phần mềm chuyên ngành tôi cần dùng thì phải làm thế nào?",
     "ground_truth_answer": "Chọn mục 'Yêu cầu phần mềm mới' trên ITSM Portal và mô tả rõ mục đích sử dụng để bộ phận An ninh thông tin thẩm định trước khi thêm vào danh mục.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 Nếu phần mềm chưa có trong danh mục: chọn \"Yêu cầu phần mềm mới\" và mô tả rõ mục đích sử dụng,\nyêu cầu này sẽ được thẩm định bởi bộ phận An ninh thông tin trước khi thêm vào danh mục."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_003",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Thời gian thẩm định đối với yêu cầu thêm phần mềm mới vào Software Catalog là bao lâu?",
     "ground_truth_answer": "Thời gian thẩm định trung bình từ 3 đến 5 ngày làm việc bởi bộ phận An ninh thông tin.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "Gửi yêu cầu \"Phần mềm mới\" kèm mô tả mục đích sử dụng; thời gian thẩm định trung bình 3-5 ngày làm\nviệc."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_004",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Khi gửi form yêu cầu cài đặt phần mềm trên ITSM Portal thì hệ thống sinh mã ticket có tiền tố gì?",
     "ground_truth_answer": "Hệ thống sẽ sinh mã ticket theo định dạng REQ-XXXXXX để nhân viên theo dõi tiến độ.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "6 Nhấn \"Gửi yêu cầu\", hệ thống sinh mã ticket dạng REQ-XXXXXX để theo dõi."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_005",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Mã tài sản (Asset Tag) của thiết bị điền trong form xin cấp phần mềm là gì và lấy ở đâu?",
     "ground_truth_answer": "Mã tài sản (Asset Tag) là mã định danh máy tính công ty cấp đã đăng ký với IT, thường được dán trên thân máy để IT nhận diện thiết bị khi triển khai cài đặt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 Chọn thiết bị cần cài đặt: máy tính công ty theo mã tài sản (Asset Tag) đã đăng ký với IT."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_006",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Phần mềm có chi phí bao nhiêu thì bắt buộc phải đính kèm văn bản phê duyệt khi tạo request?",
     "ground_truth_answer": "Phần mềm thuộc nhóm chi phí cao với giá license trên 5.000.000đ/năm bắt buộc phải đính kèm văn bản phê duyệt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "5 Đính kèm phê duyệt bằng văn bản nếu phần mềm thuộc nhóm chi phí cao (license > 5.000.000đ/năm)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_007",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Có những loại license nào để lựa chọn khi đăng ký phần mềm trên portal?",
     "ground_truth_answer": "Có hai loại license là license cá nhân (1 user) hoặc license theo nhóm (team license) nếu phòng ban đã có sẵn.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Chọn loại license: cá nhân (1 user) hoặc theo nhóm (team license) nếu phòng ban đã có sẵn."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_008",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Quy trình phê duyệt cấp quyền và cài đặt phần mềm gồm những cấp nào?",
     "ground_truth_answer": "Gồm 3 cấp: Cấp 1 - Quản lý trực tiếp (Line Manager), Cấp 2 - Chủ sở hữu ngân sách (Budget Owner, áp dụng với phần mềm trả phí), và Cấp 3 - An ninh thông tin (Security Team).",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "2.3. Bước 3 – Phê duyệt theo cấp bậc (Approval Workflow)\n1 Cấp 1 – Quản lý trực tiếp (Line Manager): phê duyệt sự cần thiết công việc, thời hạn xử lý 1 ngày làm\nviệc.\n2 Cấp 2 – Chủ sở hữu ngân sách (Budget Owner): phê duyệt chi phí license, thời hạn xử lý 1-2 ngày làm\nviệc (chỉ áp dụng với phần mềm trả phí).\n3 Cấp 3 – An ninh thông tin (Security Team): rà soát rủi ro bảo mật, đặc biệt với phần mềm yêu cầu\nquyền admin hoặc truy cập internet ngoài whitelist, thời hạn xử lý 1-3 ngày làm việc."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_009",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Quản lý trực tiếp (Line Manager) có thời hạn tối đa bao lâu để duyệt yêu cầu cài phần mềm?",
     "ground_truth_answer": "Thời hạn xử lý của Quản lý trực tiếp là trong vòng 1 ngày làm việc để xác nhận sự cần thiết của công việc.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Cấp 1 – Quản lý trực tiếp (Line Manager): phê duyệt sự cần thiết công việc, thời hạn xử lý 1 ngày làm\nviệc."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_010",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Khi nào thì một yêu cầu phần mềm cần phải qua bước duyệt của Cấp 2 - Chủ sở hữu ngân sách?",
     "ground_truth_answer": "Cấp 2 chỉ áp dụng đối với các phần mềm trả phí để phê duyệt chi phí license, thời hạn xử lý từ 1-2 ngày làm việc.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "2 Cấp 2 – Chủ sở hữu ngân sách (Budget Owner): phê duyệt chi phí license, thời hạn xử lý 1-2 ngày làm\nviệc (chỉ áp dụng với phần mềm trả phí)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_011",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Những trường hợp phần mềm nào bắt buộc Security Team phải rà soát rủi ro bảo mật?",
     "ground_truth_answer": "Các phần mềm yêu cầu cấp quyền quản trị viên (quyền admin) hoặc yêu cầu truy cập internet ra ngoài danh sách an toàn (whitelist).",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Cấp 3 – An ninh thông tin (Security Team): rà soát rủi ro bảo mật, đặc biệt với phần mềm yêu cầu\nquyền admin hoặc truy cập internet ngoài whitelist, thời hạn xử lý 1-3 ngày làm việc."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_012",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Thời hạn xử lý duyệt của bộ phận An ninh thông tin (Security Team) là bao lâu?",
     "ground_truth_answer": "Thời hạn xử lý của Security Team là từ 1 đến 3 ngày làm việc.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Cấp 3 – An ninh thông tin (Security Team): rà soát rủi ro bảo mật, đặc biệt với phần mềm yêu cầu\nquyền admin hoặc truy cập internet ngoài whitelist, thời hạn xử lý 1-3 ngày làm việc."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_013",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Sau khi ticket đã được duyệt đủ các cấp, trạng thái chuyển sang gì và phân công cho ai?",
     "ground_truth_answer": "Ticket chuyển sang trạng thái 'Approved' và tự động được gán cho đội IT Support để triển khai cài đặt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "1 Sau khi được duyệt đủ các cấp, ticket chuyển sang trạng thái \"Approved\" và tự động gán cho đội IT\nSupport."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_014",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Máy tính làm việc tại văn phòng công ty sẽ được IT cài đặt phần mềm bằng hình thức nào?",
     "ground_truth_answer": "Đội IT Support sẽ triển khai cài đặt từ xa thông qua công cụ quản lý thiết bị (Remote Deployment) mà nhân viên không cần phải thao tác trực tiếp.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "2 Với máy tính trong mạng công ty: IT Support triển khai cài đặt từ xa qua công cụ quản lý thiết bị\n(Remote Deployment), không cần nhân viên thao tác."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_015",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Nhân viên làm việc từ xa ngoài mạng công ty thì nhận phần mềm và license key bằng cách nào?",
     "ground_truth_answer": "Nhân viên sẽ nhận đường link cài đặt và license key qua email công ty để tự thực hiện cài đặt theo tài liệu hướng dẫn đính kèm.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Với máy tính ngoài mạng công ty hoặc làm việc từ xa: nhân viên nhận link cài đặt và license key qua\nemail công ty, tự cài theo hướng dẫn đính kèm."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_016",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Thời gian hoàn tất cài đặt phần mềm của IT Support tối đa là mấy ngày làm việc kể từ lúc ticket được duyệt?",
     "ground_truth_answer": "Thời gian hoàn tất cài đặt tối đa là 2 ngày làm việc kể từ khi ticket được duyệt đủ các cấp.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4 Thời gian cài đặt hoàn tất: tối đa 2 ngày làm việc kể từ khi ticket được duyệt."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_017",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Sau khi IT cài xong phần mềm và chạy thử ổn định, làm sao để hoàn tất đóng ticket?",
     "ground_truth_answer": "Vào lại ticket REQ-XXXXXX trên cổng ITSM Portal và nhấn nút 'Xác nhận hoàn tất' để đóng yêu cầu.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "2 Vào lại ticket REQ-XXXXXX trên ITSM Portal, nhấn \"Xác nhận hoàn tất\" để đóng yêu cầu."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_018",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Nếu phần mềm cài xong bị lỗi không khởi động được thì nên tạo ticket mới hay làm gì?",
     "ground_truth_answer": "Nhấn nút 'Báo lỗi' trực tiếp trên ticket REQ-XXXXXX hiện tại thay vì tạo yêu cầu mới, giúp IT xử lý tiếp nối đúng luồng công việc.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3 Nếu phát sinh lỗi cài đặt, nhấn \"Báo lỗi\" trên ticket thay vì tạo yêu cầu mới, để IT xử lý đúng luồng."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_019",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Những thông tin cần chuẩn bị trong checklist trước khi gửi yêu cầu cài đặt phần mềm là gì?",
     "ground_truth_answer": "Tên và phiên bản phần mềm, mục đích sử dụng, Asset Tag máy tính, lý do công việc cho quản lý duyệt, mã ngân sách (Cost Center) nếu trả phí, mô tả phạm vi quyền nếu cần quyền admin, và kiểm tra Agent quản lý thiết bị.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "3. Checklist những việc cần chuẩn bị trước khi xin cấpquyền\n• Xác định rõ tên phần mềm, phiên bản và mục đích sử dụng.\n• Xác định mã tài sản (Asset Tag) của thiết bị cần cài đặt.\n• Chuẩn bị lý do công việc ngắn gọn để quản lý trực tiếp phê duyệt nhanh.\n• Với phần mềm trả phí: xác nhận mã ngân sách (Cost Center) sẽ thanh toán license.\n• Với phần mềm cần quyền admin: chuẩn bị mô tả rõ phạm vi quyền cần cấp để Security Team rà soát\nnhanh hơn.\n• Kiểm tra máy tính đã cài Agent quản lý thiết bị của công ty (bắt buộc để được cài đặt từ xa)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_020",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Điều kiện bắt buộc trên máy tính để IT có thể triển khai cài đặt phần mềm từ xa là gì?",
     "ground_truth_answer": "Máy tính bắt buộc phải được cài đặt Agent quản lý thiết bị của công ty và đang bật, kết nối với mạng công ty hoặc VPN.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "• Kiểm tra máy tính đã cài Agent quản lý thiết bị của công ty (bắt buộc để được cài đặt từ xa)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_021",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Ticket của tôi bị treo ở bước Line Manager quá hạn 1 ngày không thấy duyệt thì phải xử lý thế nào?",
     "ground_truth_answer": "Kiểm tra xem người duyệt có đang nghỉ phép không; có thể nhấn tính năng 'Nhắc phê duyệt' trên ticket hoặc liên hệ trực tiếp với người duyệt.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4.1. Ticket bị treo ở bước phê duyệt quá lâu\nKiểm tra đúng người duyệt (quản lý trực tiếp/budget owner) có đang nghỉ phép không; có thể nhấn \"Nhắc\nphê duyệt\" trên ticket hoặc liên hệ trực tiếp người duyệt."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_022",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Yêu cầu cài phần mềm bị Security Team từ chối (Rejected) thì xem nguyên nhân ở đâu và khắc phục thế nào?",
     "ground_truth_answer": "Xem lý do từ chối trực tiếp trong ticket (thường do nguồn gốc phần mềm không rõ hoặc xin quyền quá rộng), sau đó bổ sung bản giải trình chi tiết và gửi lại yêu cầu.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4.2. Yêu cầu bị Security Team từ chối\nXem lý do từ chối trong ticket, thường do phần mềm không rõ nguồn gốc hoặc yêu cầu quyền quá rộng; bổ\nsung giải trình cụ thể và gửi lại yêu cầu."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_023",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Ticket đã báo Approved hơn 2 ngày làm việc nhưng máy tôi vẫn chưa thấy phần mềm được cài đặt?",
     "ground_truth_answer": "Kiểm tra máy tính có đang bật nguồn và kết nối mạng nội bộ hoặc bật VPN hay không; nếu vẫn chưa nhận được, liên hệ IT Helpdesk kèm mã ticket REQ-XXXXXX để kiểm tra.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "4.3. Đã duyệt nhưng chưa được cài đặt sau 2 ngày làm việc\nKiểm tra thiết bị có đang bật và kết nối mạng công ty (VPN) không; nếu vẫn lỗi, liên hệ IT Helpdesk kèm mã\nticket REQ-XXXXXX."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_024",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Theo dõi danh sách và tiến độ các yêu cầu phần mềm đã tạo ở mục nào trên ITSM Portal?",
     "ground_truth_answer": "Nhân viên theo dõi trực tiếp trạng thái tiến độ các yêu cầu tại mục 'My Requests' trên giao diện ITSM Portal.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "Theo dõi ticket trực tiếp trên ITSM Portal, mục \"My Requests\"."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_025",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Kênh liên hệ hỗ trợ chính thức của IT Service Desk gồm những thông tin nào?",
     "ground_truth_answer": "Email IT Service Desk: itservicedesk@company.com và Hotline nội bộ: 1900-yyy (hoạt động từ 8:00 - 17:30, Thứ 2 đến Thứ 6).",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "IT Service Desk: itservicedesk@company.com | Hotline nội bộ: 1900-yyy (giờ hành chính, Thứ 2 - Thứ 6, 8:00 -\n17:30)"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_026",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "in_domain_single_hop",
     "question": "Xin cấp quyền quản trị (quyền admin) cho phần mềm cần lưu ý bổ sung thông tin gì để Security duyệt nhanh?",
     "ground_truth_answer": "Cần chuẩn bị mô tả cụ thể và rõ ràng phạm vi công việc cần sử dụng quyền admin để Security Team có căn cứ thẩm định rủi ro nhanh hơn.",
     "ground_truth_contexts": [
       {
         "source_doc": "Phan_mem.pdf",
-        "evidence_text": ""
+        "evidence_text": "• Với phần mềm cần quyền admin: chuẩn bị mô tả rõ phạm vi quyền cần cấp để Security Team rà soát\nnhanh hơn."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_SFT_027",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "out_of_domain",
     "question": "Máy in ở tầng 2 đang bị kẹt giấy và nháy đèn đỏ liên tục, IT lên sửa giúp phòng mình với.",
     "ground_truth_answer": null,
@@ -1219,7 +1219,7 @@
   },
   {
     "id": "TC_SFT_028",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "out_of_domain",
     "question": "Hộp thư Outlook của tôi báo Disconnected và không nhận được email mới từ hôm qua đến giờ.",
     "ground_truth_answer": null,
@@ -1233,7 +1233,7 @@
   },
   {
     "id": "TC_SFT_029",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "out_of_domain",
     "question": "Bàn phím laptop của tôi bị liệt mấy phím số và phím cách, bên IT có sẵn bàn phím đổi cho tôi không?",
     "ground_truth_answer": null,
@@ -1247,7 +1247,7 @@
   },
   {
     "id": "TC_SFT_030",
-    "category": "PHAN_MEM",
+    "category": "SOFTWARE",
     "query_type": "out_of_domain",
     "question": "Tôi muốn xin nghỉ phép năm 2 ngày vào tuần sau thì làm thủ tục phê duyệt trên phần mềm nào?",
     "ground_truth_answer": null,
@@ -1267,8 +1267,8 @@
     "ground_truth_answer": "Truy cập hrportal.company.com, nhấn 'Quên mật khẩu?', nhập mã nhân viên hoặc email công ty đăng ký. Sau đó mở email nhấn liên kết nhận được (hiệu lực trong 15 phút), nhập mật khẩu mới 2 lần để xác nhận.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "2.1. Tự đặt lại qua email (khuyến nghị)\n1 Truy cập trang đăng nhập tại hrportal.company.com.\n2 Nhấn liên kết \"Quên mật khẩu?\" nằm dưới ô mật khẩu.\n3 Nhập mã nhân viên (VD: NV00123) hoặc email công ty đã đăng ký.\n4 Hệ thống gửi email chứa liên kết đặt lại mật khẩu, hiệu lực trong 15 phút.\n5 Mở email, nhấn \"Đặt lại mật khẩu\", nhập mật khẩu mới 2 lần để xác nhận.\n6 Hệ thống hiển thị thông báo thành công và tự động đưa về trang đăng nhập.\n7 Đăng nhập lại bằng mật khẩu mới vừa tạo."
       }
     ],
     "human_handoff": false
@@ -1281,8 +1281,8 @@
     "ground_truth_answer": "Liên kết đặt lại mật khẩu gửi về email có hiệu lực trong vòng 15 phút.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "4 Hệ thống gửi email chứa liên kết đặt lại mật khẩu, hiệu lực trong 15 phút."
       }
     ],
     "human_handoff": false
@@ -1295,8 +1295,8 @@
     "ground_truth_answer": "Tại trang đăng nhập, chọn 'Quên mật khẩu?', chuyển sang tab 'Xác thực qua SMS', nhập số điện thoại đã đăng ký với Nhân sự để nhận mã OTP 6 số và đặt lại mật khẩu mới.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "2.2. Đặt lại qua xác thực OTP điện thoại (khi không truy cập được email)\n1 Tại trang đăng nhập, chọn \"Quên mật khẩu?\" rồi chọn tab \"Xác thực qua\nSMS\".\n2 Nhập số điện thoại đã đăng ký với phòng Nhân sự. 3 Nhập mã OTP 6\nsố gửi qua SMS trong vòng 5 phút.\n4 Tạo mật khẩu mới theo đúng quy định độ mạnh mật khẩu (xem mục 4).\n5 Xác nhận và đăng nhập lại."
       }
     ],
     "human_handoff": false
@@ -1309,8 +1309,8 @@
     "ground_truth_answer": "Mã OTP 6 số gửi qua SMS có hiệu lực trong vòng 5 phút.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3 Nhập mã OTP 6\nsố gửi qua SMS trong vòng 5 phút."
       }
     ],
     "human_handoff": false
@@ -1323,8 +1323,8 @@
     "ground_truth_answer": "Gửi yêu cầu tới bộ phận IT Helpdesk kèm theo mã nhân viên và giấy tờ xác minh danh tính để được cấp mật khẩu tạm thời.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "2.3. Nhờ quản trị viên (Admin/IT) reset hộ\n1 Áp dụng khi không còn quyền truy cập cả email lẫn số điện thoại đã đăng ký.\n2 Gửi yêu cầu tới bộ phận IT Helpdesk kèm mã nhân viên và giấy tờ xác minh danh tính.\n3 IT tạo mật khẩu tạm thời và gửi qua kênh nội bộ an toàn (không gửi qua chat thường).\n4 Nhân viên đăng nhập bằng mật khẩu tạm và bắt buộc đổi mật khẩu mới ngay lần đăng nhập đầu tiên."
       }
     ],
     "human_handoff": false
@@ -1337,8 +1337,8 @@
     "ground_truth_answer": "Không, IT tạo mật khẩu tạm thời và chỉ gửi qua kênh nội bộ an toàn, không gửi qua ứng dụng chat thông thường.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3 IT tạo mật khẩu tạm thời và gửi qua kênh nội bộ an toàn (không gửi qua chat thường)."
       }
     ],
     "human_handoff": false
@@ -1351,8 +1351,8 @@
     "ground_truth_answer": "Không, nhân viên bắt buộc phải đổi sang mật khẩu mới ngay trong lần đăng nhập đầu tiên bằng mật khẩu tạm.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "4 Nhân viên đăng nhập bằng mật khẩu tạm và bắt buộc đổi mật khẩu mới ngay lần đăng nhập đầu tiên."
       }
     ],
     "human_handoff": false
@@ -1365,8 +1365,8 @@
     "ground_truth_answer": "Kiểm tra kỹ trong thư mục Spam/Junk; đối chiếu lại địa chỉ email đã đăng ký với Nhân sự; chờ tối đa 5 phút phòng trường hợp hệ thống mail delay rồi mới thử gửi lại.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.1. Không nhận được email đặt lại mật khẩu\nNguyên nhân: Email rơi vào thư mục Spam/Junk; sai địa chỉ email đăng ký; hệ thống mail nội bộ delay.\nCách khắc phục: Kiểm tra thư mục Spam; xác minh email đăng ký với Nhân sự; đợi tối đa 5 phút rồi thử gửi\nlại."
       }
     ],
     "human_handoff": false
@@ -1379,8 +1379,8 @@
     "ground_truth_answer": "Nguyên nhân do liên kết đã vượt quá thời hạn hiệu lực 15 phút hoặc liên kết đó đã được nhấp sử dụng trước đó. Khắc phục bằng cách quay lại trang chủ yêu cầu gửi liên kết mới.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.2. Liên kết đặt lại mật khẩu báo \"Hết hạn\" hoặc \"Không hợp lệ\"\nNguyên nhân: Liên kết chỉ có hiệu lực 15 phút hoặc đã được dùng một lần trước đó.\nCách khắc phục: Quay lại trang đăng nhập và yêu cầu gửi lại liên kết mới."
       }
     ],
     "human_handoff": false
@@ -1393,8 +1393,8 @@
     "ground_truth_answer": "Kiểm tra vạch sóng điện thoại; chờ 1 phút rồi thử gửi lại mã; nếu vẫn không được (do sai số hoặc nhà mạng chặn tin nhắn thương hiệu), chuyển sang reset qua email hoặc liên hệ IT Helpdesk.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.3. Không nhận được mã OTP qua SMS\nNguyên nhân: Sai số điện thoại đăng ký; điện thoại mất sóng; nhà mạng chặn tin nhắn thương hiệu.\nCách khắc phục: Kiểm tra sóng điện thoại; thử lại sau 1 phút; nếu vẫn lỗi, chuyển sang phương án reset\nqua email hoặc IT."
       }
     ],
     "human_handoff": false
@@ -1407,8 +1407,8 @@
     "ground_truth_answer": "Do mật khẩu chưa đủ 10 ký tự, thiếu chữ hoa, chữ thường, số hoặc ký tự đặc biệt, hoặc mật khẩu này bị trùng với 5 mật khẩu gần nhất.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.4. Mật khẩu mới bị từ chối \"Không đạt yêu cầu độ mạnh\"\nNguyên nhân: Mật khẩu quá ngắn, không đủ chữ hoa/số/ký tự đặc biệt, hoặc trùng với 5 mật khẩu gần\nnhất.\nCách khắc phục: Đặt mật khẩu tối thiểu 10 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt, không\ntrùng mật khẩu cũ."
       }
     ],
     "human_handoff": false
@@ -1421,8 +1421,8 @@
     "ground_truth_answer": "Nhập sai mật khẩu liên tiếp từ 5 lần trở lên, hệ thống sẽ tự động khóa tài khoản để bảo vệ.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.5. Tài khoản bị khóa \"Quá nhiều lần thử sai\"\nNguyên nhân: Nhập sai mật khẩu liên tiếp từ 5 lần trở lên, hệ thống tự khóa tài khoản 30 phút để bảo vệ."
       }
     ],
     "human_handoff": false
@@ -1435,8 +1435,8 @@
     "ground_truth_answer": "Tài khoản sẽ tự động mở khóa sau 30 phút, hoặc người dùng có thể liên hệ IT Helpdesk để được hỗ trợ mở khóa ngay lập tức.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "Cách khắc phục: Chờ 30 phút để tự mở khóa, hoặc liên hệ IT Helpdesk để mở khóa ngay lập tức."
       }
     ],
     "human_handoff": false
@@ -1449,8 +1449,8 @@
     "ground_truth_answer": "Do bàn phím đang bật phím Caps Lock hoặc trình duyệt đang lưu cache tự động điền mật khẩu cũ. Cần tắt Caps Lock, xóa cache trình duyệt, mở tab ẩn danh và nhập lại mật khẩu mới thủ công.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "3.6. Đổi mật khẩu thành công nhưng vẫn không đăng nhập được\nNguyên nhân: Trình duyệt lưu cache/mật khẩu cũ tự động điền; gõ nhầm phím Caps Lock đang bật.\nCách khắc phục: Tắt Caps Lock; xóa cache trình duyệt hoặc dùng cửa sổ ẩn danh; nhập lại thủ công."
       }
     ],
     "human_handoff": false
@@ -1463,8 +1463,8 @@
     "ground_truth_answer": "Mật khẩu của HRPortal yêu cầu tối thiểu là 10 ký tự.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "4. Quy định độ mạnh mật khẩu của HRPortal\n• Tối thiểu 10 ký tự."
       }
     ],
     "human_handoff": false
@@ -1477,8 +1477,8 @@
     "ground_truth_answer": "Không, quy định bảo mật bắt buộc mật khẩu không được chứa mã nhân viên, họ tên hoặc ngày sinh của người dùng.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Không chứa mã nhân viên, họ tên hoặc ngày sinh."
       }
     ],
     "human_handoff": false
@@ -1491,8 +1491,8 @@
     "ground_truth_answer": "Không, hệ thống quy định mật khẩu mới không được trùng với 5 mật khẩu đã sử dụng gần nhất.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Không trùng với 5 mật khẩu đã sử dụng gần nhất."
       }
     ],
     "human_handoff": false
@@ -1505,8 +1505,8 @@
     "ground_truth_answer": "Hệ thống bắt buộc nhân viên phải thay đổi mật khẩu định kỳ 90 ngày một lần.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Bắt buộc đổi mật khẩu 90 ngày một lần."
       }
     ],
     "human_handoff": false
@@ -1519,8 +1519,8 @@
     "ground_truth_answer": "Ghép 3-4 từ không liên quan nhau kèm số và ký tự đặc biệt (ví dụ: 'TraSua#Sach7Mua!'), giúp mật khẩu dài, an toàn cao, khó đoán nhưng lại rất dễ nhớ.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "5. Mẹo ghi nhớ mật khẩu an toàn\n• Dùng phương pháp \"câu passphrase\": ghép 3-4 từ không liên quan kèm số/ký tự đặc biệt, ví dụ\n\"TraSua#Sach7Mua!\" – vừa dài, vừa dễ nhớ, khó đoán."
       }
     ],
     "human_handoff": false
@@ -1533,8 +1533,8 @@
     "ground_truth_answer": "Không nên ghi nguyên văn mật khẩu ra giấy. Nên sử dụng ứng dụng quản lý mật khẩu (password manager) được công ty duyệt, hoặc nếu ghi chú thì chỉ ghi gợi ý (hint).",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Sử dụng ứng dụng quản lý mật khẩu (password manager) được công ty phê duyệt thay vì ghi ra giấy.\n• Nếu cần ghi nhớ thủ công, chỉ ghi gợi ý (hint) chứ không ghi nguyên văn mật khẩu."
       }
     ],
     "human_handoff": false
@@ -1547,8 +1547,8 @@
     "ground_truth_answer": "Cần chủ động thực hiện đổi mật khẩu ngay lập tức khi có nghi ngờ bị lộ mà không cần chờ đến hạn chu kỳ 90 ngày.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Đổi mật khẩu ngay khi nghi ngờ bị lộ, không đợi đến hạn 90 ngày."
       }
     ],
     "human_handoff": false
@@ -1561,8 +1561,8 @@
     "ground_truth_answer": "Bật xác thực 2 lớp giúp tăng cường an toàn, giảm thiểu rủi ro bị xâm nhập tài khoản ngay cả trong trường hợp vô tình bị lộ hoặc quên mật khẩu.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "• Bật xác thực 2 lớp (2FA) nếu HRPortal có hỗ trợ, để giảm rủi ro dù lỡ quên hoặc lộ mật khẩu."
       }
     ],
     "human_handoff": false
@@ -1575,8 +1575,8 @@
     "ground_truth_answer": "HRPortal hỗ trợ các trình duyệt Web Browser (Chrome, Edge, Firefox) và ứng dụng di động Mobile App (hệ điều hành iOS và Android).",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "1. Tổng quan\nHRPortal là hệ thống quản lý nhân sự nội bộ, dùng để tra cứu bảng lương, chấm công, đơn nghỉ phép và hồ sơ\nnhân viên."
       }
     ],
     "human_handoff": false
@@ -1589,8 +1589,8 @@
     "ground_truth_answer": "Địa chỉ đăng nhập chính thức là hrportal.company.com.",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "1 Truy cập trang đăng nhập tại hrportal.company.com."
       }
     ],
     "human_handoff": false
@@ -1603,8 +1603,8 @@
     "ground_truth_answer": "Email: helpdesk@hrportal-company.com và Hotline nội bộ: 1900-xxx (giờ hành chính, Thứ 2 - Thứ 6, từ 8:00 - 17:30).",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "IT Helpdesk: helpdesk@hrportal-company.com | Hotline nội bộ: 1900-xxx (giờ hành chính, Thứ 2 - Thứ 6, 8:00\n- 17:30)."
       }
     ],
     "human_handoff": false
@@ -1617,8 +1617,8 @@
     "ground_truth_answer": "Bắt buộc phải có ít nhất 1 chữ số và ít nhất 1 ký tự đặc biệt (chẳng hạn !@#$%).",
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
-        "evidence_text": ""
+        "source_doc": "Reset_Forget_PW.pdf",
+        "evidence_text": "4. Quy định độ mạnh mật khẩu của HRPortal\n• Tối thiểu 10 ký tự.\n• Có ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt (!@#$%...)."
       }
     ],
     "human_handoff": false
@@ -1631,7 +1631,7 @@
     "ground_truth_answer": null,
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
+        "source_doc": "Reset_Forget_PW.pdf",
         "evidence_text": ""
       }
     ],
@@ -1645,7 +1645,7 @@
     "ground_truth_answer": null,
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
+        "source_doc": "Reset_Forget_PW.pdf",
         "evidence_text": ""
       }
     ],
@@ -1659,7 +1659,7 @@
     "ground_truth_answer": null,
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
+        "source_doc": "Reset_Forget_PW.pdf",
         "evidence_text": ""
       }
     ],
@@ -1673,7 +1673,7 @@
     "ground_truth_answer": null,
     "ground_truth_contexts": [
       {
-        "source_doc": "Reset_Forgot_PW.pdf",
+        "source_doc": "Reset_Forget_PW.pdf",
         "evidence_text": ""
       }
     ],
@@ -1681,371 +1681,371 @@
   },
   {
     "id": "TC_VPN_001",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Cài đặt FortiClient trên Windows báo lỗi TAP-Windows Adapter V9 install failed thì xử lý thế nào?",
     "ground_truth_answer": "Chạy file cài đặt bằng quyền Run as administrator, kiểm tra Device Manager (devmgmt.msc) xem card mạng ảo có bị vô hiệu hóa hoặc thiếu driver không để Enable/Update driver, và kiểm tra phần mềm diệt virus có chặn cài đặt không.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Quy trình xử lý từng bước:\n1. Khởi chạy quyền quản trị: Chuột phải vào file cài đặt .exe / .msi chọn Run as administrator.\n2. Kiểm tra trạng thái Adapter trong Device Manager:\n■ Nhấn tổ hợp Win + R, gõ devmgmt.msc và nhấn Enter.\n\n■ Mở rộng mục Network adapters.\n■ Tìm card mạng ảo (ví dụ: Fortinet Virtual Ethernet Adapter hoặc TAP-Windows Adapter V9).\n■ Nếu có biểu tượng chấm than vàng: Chuột phải chọn Enable device hoặc Update driver > Browse\nmy computer for drivers trỏ về thư mục cài đặt của client."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_002",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Client VPN báo Virtual network adapter missing hoặc disabled, kiểm tra ở đâu trong Windows?",
     "ground_truth_answer": "Mở hộp thoại Run (Win+R) gõ devmgmt.msc, mở rộng mục Network adapters, tìm card mạng ảo (như Fortinet Virtual Ethernet Adapter hoặc TAP-Windows Adapter V9) và chuột phải chọn Enable device.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "2. Kiểm tra trạng thái Adapter trong Device Manager:\n■ Nhấn tổ hợp Win + R, gõ devmgmt.msc và nhấn Enter.\n\n■ Mở rộng mục Network adapters.\n■ Tìm card mạng ảo (ví dụ: Fortinet Virtual Ethernet Adapter hoặc TAP-Windows Adapter V9).\n■ Nếu có biểu tượng chấm than vàng: Chuột phải chọn Enable device hoặc Update driver > Browse\nmy computer for drivers trỏ về thư mục cài đặt của client."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_003",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Các bước reset ngăn xếp mạng hệ thống (Network Stack) qua Command Prompt khi card mạng ảo VPN bị lỗi?",
     "ground_truth_answer": "Mở cmd với quyền Administrator, thực hiện reset cấu hình IP và ngăn xếp mạng hệ thống (chạy các lệnh cấu hình ipconfig/reset stack) rồi khởi động lại máy tính.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "3. Reset ngăn xếp mạng hệ thống (Network Stack):\n■ Mở Command Prompt (cmd) với quyền Administrator và chạy lần lượt: DOS\nnetsh winsock reset netsh\nint ip reset\nipconfig /flushdns\n■ Khởi động lại máy tính."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_004",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Đăng nhập VPN báo Authentication failed dù đã nhập đúng mật khẩu tài khoản công ty, nguyên nhân do đâu?",
     "ground_truth_answer": "Do tài khoản Active Directory/LDAP bị khóa (Account Locked Out), tài khoản bị bắt buộc đổi mật khẩu ở lần đăng nhập tới, hoặc tài khoản chưa được thêm vào Security Group cho phép truy cập VPN (như VPN-Users-Group).",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Nguyên nhân cốt lõi:\n○ Sai mật khẩu hoặc tài khoản Active Directory / LDAP bị khóa (Account Locked Out).\n○ Lệch múi giờ giữa thiết bị người dùng và máy chủ xác thực NTP (khiến mã TOTP 30 giây bị lệch).\n○ Chưa cấp quyền nhóm bảo mật VPN (Security Group) trên Active Directory."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_005",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Mã xác thực OTP trên app điện thoại nhập vào VPN cứ báo không hợp lệ liên tục thì sửa thế nào?",
     "ground_truth_answer": "Kiểm tra và bật tính năng đồng bộ thời gian tự động trên điện thoại và máy tính (Settings > Time & Language > Date & time > Sync now với time.windows.com) để tránh lệch mã TOTP 30 giây với máy chủ NTP.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "2. Đồng bộ thời gian trên máy trạm:\n■ Vào Settings > Time & Language > Date & time.\n■ Bật Set time automatically và Set time zone automatically.\n■ Nhấn nút Sync now dưới mục Additional settings để đồng bộ thời gian với time.windows.com.\n3. Xử lý MFA/OTP:\n■ Đảm bảo app xác thực (Microsoft Authenticator / Google Authenticator) trên điện thoại cũng đã\nbật chế độ đồng bộ thời gian tự động."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_006",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Nhân viên mới đổi điện thoại nên không nhận được thông báo xác thực MFA khi kết nối VPN thì làm sao?",
     "ground_truth_answer": "Liên hệ quản trị viên IT để reset lại phương thức xác thực đa yếu tố (MFA) của người dùng trên portal quản lý danh tính.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "■ Nếu đổi điện thoại mới, quản trị viên cần reset lại phương thức MFA của người dùng trên portal\nquản lý danh tính."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_007",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "FortiClient kết nối đến 98% hoặc 40% thì bị dừng lại và tự ngắt kết nối là bị lỗi gì?",
     "ground_truth_answer": "Thường do cạn kiệt dải IP trong DHCP pool trên VPN Gateway, router Wi-Fi chặn IPsec/ESP hoặc can thiệp SSL Inspection, hoặc phiên bản TLS trên Windows không khớp cấu hình Gateway.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Nguyên nhân cốt lõi:\n○ Kẹt tại bước cấp phát IP nội bộ (DHCP pool trên VPN Gateway bị cạn kiệt IP).\n○ Thiết bị trung gian (Router Wi-Fi tại nhà người dùng, 4G hotspot) chặn giao thức IPsec/ESP hoặc\ncan thiệp SSL Inspection.\n○ Tùy chọn TLS trong hệ điều hành không khớp với cấu hình SSL-VPN trên Gateway."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_008",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Cách cấu hình phiên bản TLS trong Internet Properties để sửa lỗi FortiClient treo 98%?",
     "ground_truth_answer": "Mở Run (Win+R) gõ inetcpl.cpl, vào tab Advanced, cuộn xuống nhóm Security, tích chọn Use TLS 1.2 và Use TLS 1.3, đồng thời bỏ chọn SSL 3.0, TLS 1.0 và TLS 1.1.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "1. Kiểm tra cấu hình TLS trên Windows:\n■ Nhấn Win + R, gõ inetcpl.cpl (Internet Properties).\n■ Chuyển sang tab Advanced, cuộn xuống nhóm Security.\n■ Đảm bảo đã tích chọn Use TLS 1.2 và Use TLS 1.3 (bỏ chọn SSL 3.0, TLS 1.0, TLS 1.1)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_009",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Tại sao dùng mạng 4G phát từ điện thoại kết nối VPN được nhưng dùng Wi-Fi ở nhà lại bị treo?",
     "ground_truth_answer": "Do modem Wi-Fi tại nhà chặn giao thức VPN; cần truy cập router nhà mạng bật tính năng IPsec Passthrough/PPTP Passthrough hoặc đổi DNS máy trạm sang 8.8.8.8 hoặc 1.1.1.1.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "2. Chuyển đổi nguồn mạng test đường truyền:\n■ Cho người dùng phát Wi-Fi từ điện thoại di động (4G/5G) để máy tính kết nối thử.\n■ Nếu 4G vào được: Vấn đề do modem Wi-Fi tại nhà (cần bật tính năng IPsec Passthrough / PPTP\nPassthrough trên router nhà mạng hoặc đổi DNS trên máy trạm thành 8.8.8.8 / 1.1.1.1)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_010",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Cisco AnyConnect quay vòng liên tục ở trạng thái Connecting thì restart dịch vụ nào trong Windows?",
     "ground_truth_answer": "Mở services.msc, tìm dịch vụ Cisco AnyConnect Secure Mobility Agent (hoặc FortiClient Service đối với FortiClient) rồi nhấn chuột phải chọn Restart.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "3. Khởi động lại tiến trình dịch vụ client:\n■ Mở services.msc, tìm dịch vụ tương ứng (ví dụ: FortiClient Service, Cisco AnyConnect Secure\nMobility Agent).\n■ Chuột phải chọn Restart."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_011",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "VPN đã báo Connected nhưng không mở được thư mục chia sẻ file nội bộ dạng \\\\192.168.x.x, xử lý thế nào?",
     "ground_truth_answer": "Kiểm tra xung đột dải mạng IP giữa router ở nhà và công ty (Subnet Overlap), kiểm tra bảng định tuyến (route print) trên máy trạm hoặc cấu hình lại DNS nội bộ trên card mạng ảo VPN.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Nguyên nhân cốt lõi:\n○ Lỗi phân giải tên miền nội bộ (Internal DNS Resolution Failure) do client vẫn sử dụng DNS của\nrouter nhà thay vì DNS do VPN cấp.\n○ Xung đột dải mạng LAN cục bộ với dải mạng công ty (Subnet Overlap). Ví dụ: Mạng ở\nnhà dùng 192.168.1.0/24, mạng công ty cũng đặt 192.168.1.0/24.\n○ Bảng định tuyến (Routing Table) trên máy trạm chưa tự cập nhật route cho Split Tunnel."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_012",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Hiện tượng Subnet Overlap khi kết nối VPN từ xa là gì và cách khắc phục ra sao?",
     "ground_truth_answer": "Là hiện tượng dải IP mạng LAN tại nhà trùng hoàn toàn với dải IP nội bộ công ty (cùng là 192.168.1.0/24). Khắc phục bằng cách đổi dải IP LAN của router ở nhà sang dải khác (ví dụ: 192.168.10.x) hoặc cấu hình lại pool IP VPN trên Gateway.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "1. Kiểm tra xung đột dải IP:\n■ Mở cmd, chạy ipconfig /all.\n■ Kiểm tra IP của card Wi-Fi/Ethernet và IP của VPN Adapter. Nếu hai dải mạng giống hệt nhau (cùng\nthuộc 192.168.1.x), hướng dẫn người dùng đổi IP LAN của router ở nhà sang dải khác (ví dụ:\n192.168.10.x) hoặc thiết lập lại dải IP VPN trên Gateway."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_013",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Kết nối VPN xong gõ IP server thì vào được nhưng gõ tên miền erp.company.local lại không vào được?",
     "ground_truth_answer": "Do lỗi phân giải DNS nội bộ vì máy trạm vẫn dùng DNS router nhà. Khắc phục bằng cách vào ncpa.cpl > Properties card VPN > TCP/IPv4 > điền thủ công Preferred DNS Server là địa chỉ IP của máy chủ DNS nội bộ công ty.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "■ Nếu dùng IP vào được nhưng dùng domain không được: Chỉ định DNS nội bộ thủ công trên Virtual\nAdapter:\n\n■ Mở ncpa.cpl > Chuột phải vào Virtual VPN Adapter > Properties.\n■ Chọn Internet Protocol Version 4 (TCP/IPv4) > Properties.\n■ Điền Preferred DNS Server là địa chỉ IP máy chủ DNS nội bộ của công ty."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_014",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Vừa bật VPN lên là máy tính mất sạch mạng Internet, không lướt được web ngoài hay dùng Teams, Outlook?",
     "ground_truth_answer": "Do cấu hình Full Tunnel đẩy toàn bộ traffic qua Gateway nhưng chưa mở NAT Outbound, hoặc tùy chọn Use default gateway on remote network đang được kích hoạt trên VPN Adapter trong khi hệ thống chạy Split Tunnel.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Nguyên nhân cốt lõi:\n○ Cấu hình Full Tunnel đẩy toàn bộ traffic ra Gateway công ty nhưng firewall công ty không cấu hình\nchính sách NAT/Internet Outbound cho client VPN.\n○ Tính năng Use default gateway on remote network trên Windows Adapter đang được bật trong\nkhi hệ thống triển khai theo mô hình Split Tunnel."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_015",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Làm thế nào để tắt tính năng Use default gateway on remote network trên Windows Built-in VPN?",
     "ground_truth_answer": "Mở ncpa.cpl > chuột phải kết nối VPN > Properties > tab Networking > TCP/IPv4 > Properties > Advanced > bỏ tích chọn 'Use default gateway on remote network' rồi reconnect VPN.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "1. Tắt default gateway trên VPN Adapter (đối với Windows Built-in VPN): ■ Mở ncpa.cpl >\nChuột phải vào kết nối VPN > Properties.\n■ Chọn tab Networking > Chọn Internet Protocol Version 4 (TCP/IPv4) > Nhấn Properties.\n■ Chọn Advanced.\n■ Bỏ tích chọn ô Use default gateway on remote network. ■ Nhấn\nOK ở tất cả cửa sổ và ngắt kết nối rồi kết nối lại VPN."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_016",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Trong file cấu hình OpenVPN (.ovpn), dòng lệnh nào khiến toàn bộ Internet bị ép đi qua VPN Gateway?",
     "ground_truth_answer": "Dòng lệnh 'redirect-gateway def1' ép toàn bộ lưu lượng định tuyến qua đường hầm Full Tunnel; cần bỏ dòng này nếu hệ thống dùng mô hình Split Tunneling.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "■ Với OpenVPN: Kiểm tra file .ovpn, đảm bảo cấu hình không chứa dòng redirect-gateway def1 nếu\nkhông có chủ đích dùng Full Tunnel."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_017",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Sự khác biệt giữa Full Tunnel và Split Tunneling trong kết nối VPN là gì?",
     "ground_truth_answer": "Full Tunnel chuyển toàn bộ lưu lượng (cả Internet lẫn nội bộ) qua VPN Gateway giúp bảo mật cao nhưng tốn băng thông; Split Tunneling chỉ chuyển lưu lượng tới các dải IP nội bộ công ty qua VPN, lưu lượng web thông thường đi qua mạng người dùng.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "● Mô hình định tuyến:\n○ Full Tunnel: Toàn bộ lưu lượng mạng (cả Internet và mạng nội bộ) đều đi qua VPN Gateway. Độ\nbảo mật cao nhưng tiêu tốn băng thông gateway.\n○ Split Tunneling: Chỉ lưu lượng truy cập dải mạng nội bộ (e.g., 10.x.x.x, 172.16.x.x, 192.168.x.x) mới\nđi qua đường hầm VPN; lưu lượng lướt web thông thường đi trực tiếp qua ISP của người dùng."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_018",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Cứ để máy tính không dùng 15 phút hoặc gập màn hình là VPN tự ngắt kết nối thì chỉnh ở đâu?",
     "ground_truth_answer": "Mở devmgmt.msc > Network adapters > chuột phải card Wi-Fi/Ethernet và Card VPN > Properties > tab Power Management > bỏ tích chọn 'Allow the computer to turn off this device to save power'.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "1. Tắt chế độ tiết kiệm điện cho card mạng:\n■ Mở devmgmt.msc > Network adapters.\n■ Chuột phải vào card Wi-Fi/Ethernet chính và Card VPN > Properties.\n■ Vào tab Power Management > Bỏ tích chọn Allow the computer to turn off this device to save\npower."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_019",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Làm thế nào để kiểm tra tỷ lệ rớt gói tin (packet loss) mạng Wi-Fi người dùng khi kết nối VPN thường xuyên bị ngắt?",
     "ground_truth_answer": "Mở Command Prompt chạy lệnh ping kiểm tra độ ổn định tới máy chủ DNS (như ping 8.8.8.8 -n 50); nếu tỷ lệ Lost > 5% hoặc latency nhảy vọt thì nên chuyển sang dùng cáp LAN hoặc lại gần router.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "2. Kiểm tra độ suy hao gói tin Internet của người dùng:\n■ Mở cmd, chạy lệnh: DOS\nping 8.8.8.8 -n 50\n■ Nếu tỷ lệ Lost > 5% hoặc latency nhảy vọt liên tục, khuyến nghị người dùng chuyển sang cắm cáp\nLAN hoặc lại gần router Wi-Fi hơn."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_020",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "VPN báo lỗi Error 800 hoặc Error 807 khi kết nối có ý nghĩa gì và xử lý thế nào?",
     "ground_truth_answer": "Lỗi không chạm tới máy chủ VPN Server; cần kiểm tra lại địa chỉ host, kiểm tra kết nối mạng Internet và kiểm tra tường lửa/router có đang chặn cổng kết nối VPN hay không.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "Error 800 / 807 Không chạm tới VPN Server\nKiểm tra lại địa chỉ host, kiểm\ntra kết nối Internet,\nkiểm tra firewall chặn port VPN"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_021",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Mã lỗi Error 691 trên VPN xuất hiện trong trường hợp nào?",
     "ground_truth_answer": "Do sai tên tài khoản hoặc mật khẩu đăng nhập; cần kiểm tra lại thông tin tài khoản Active Directory, tắt phím Caps Lock và kiểm tra user có bị khóa (Lockout) không.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "Error 691 Sai tài khoản/mật khẩu Xác thực lại thông tin AD, kiểm\ntra CapsLock, kiểm tra user có\nbị Lock không"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_022",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Kết nối VPN báo lỗi Error 789 thì cần kiểm tra những yếu tố nào?",
     "ground_truth_answer": "Lỗi đàm phán bảo mật L2TP/IPsec; cần kiểm tra lại chuỗi Pre-Shared Key (PSK) và kích hoạt dịch vụ 'IKE and AuthIP IPsec Keying Modules' trong services.msc.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "Error 789 Lỗi đàm phán bảo mật Kiểm tra Pre-Shared Key (PSK),\nL2TP/IPsec kích hoạt dịch vụ IKE and\nAuthIP IPsec Keying\nModules"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_023",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Thông báo lỗi TLS Handshake Failed khi kết nối VPN có nguyên nhân và cách xử lý nhanh là gì?",
     "ground_truth_answer": "Do lỗi bắt tay bảo mật hoặc chứng chỉ; cần kiểm tra lại đồng bộ thời gian hệ thống, cập nhật chứng chỉ số CA Certificate và kiểm tra cổng 443 hoặc 1194 có bị chặn không.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "TLS Handshake Failed Lỗi bắt tay bảo mật/Chứng chỉ Kiểm tra thời gian hệ thống,\ncập nhật chứng chỉ CA\n(Certificate), kiểm tra chặn port\n443/1194"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_024",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Thông báo TAP Adapter Not Found xuất hiện thì khắc phục nhanh bằng cách nào?",
     "ground_truth_answer": "Cài đặt lại phần mềm client bằng quyền Run as administrator và kiểm tra kích hoạt lại TAP driver trong Device Manager.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "TAP Adapter Not Found Thiếu driver mạng ảo Cài đặt lại client với quyền\nAdmin, kích hoạt TAP driver\ntrong Device Manager"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_025",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Hệ thống hỗ trợ những ứng dụng VPN Client nào cho người dùng kết nối từ xa?",
     "ground_truth_answer": "Các client được hỗ trợ gồm: OpenVPN, FortiClient, Cisco AnyConnect, WireGuard và Windows Built-in VPN.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "2. Đối với Client bên thứ 3 (OpenVPN / FortiClient / WireGuard):"
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_026",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "in_domain_single_hop",
     "question": "Đường truyền Internet dùng VPN yêu cầu không được chặn các cổng mạng TCP/UDP phổ biến nào?",
     "ground_truth_answer": "Yêu cầu không chặn các cổng của giao thức VPN như UDP 1194, TCP/UDP 443 và UDP 500/4500.",
     "ground_truth_contexts": [
       {
         "source_doc": "VPN_Connection.pdf",
-        "evidence_text": ""
+        "evidence_text": "○ Đường truyền Internet ổn định (không chặn cổng UDP/TCP của giao thức VPN tương ứng như UDP\n1194, TCP/UDP 443, UDP 500/4500)."
       }
     ],
     "human_handoff": false
   },
   {
     "id": "TC_VPN_027",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "out_of_domain",
     "question": "Máy in phòng họp tầng 2 bị kẹt giấy và báo lỗi Paper Jam, IT qua kéo giấy ra giúp với.",
     "ground_truth_answer": null,
@@ -2059,7 +2059,7 @@
   },
   {
     "id": "TC_VPN_028",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "out_of_domain",
     "question": "Tôi quên mật khẩu vào xem phiếu lương trên HRPortal thì tự lấy lại mật khẩu thế nào?",
     "ground_truth_answer": null,
@@ -2073,7 +2073,7 @@
   },
   {
     "id": "TC_VPN_029",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "out_of_domain",
     "question": "Hộp thư Outlook của tôi cứ 5 phút lại hiện pop-up bắt nhập mật khẩu dù đã gõ đúng pass.",
     "ground_truth_answer": null,
@@ -2087,7 +2087,7 @@
   },
   {
     "id": "TC_VPN_030",
-    "category": "VPN_Connection",
+    "category": "VPN",
     "query_type": "out_of_domain",
     "question": "Phòng Marketing muốn xin cấp thêm license bản quyền Adobe Premiere thì tạo request ở đâu?",
     "ground_truth_answer": null,
