@@ -29,6 +29,14 @@ def render_prompt(template_name: str, **values: object) -> str:
     return _prompts.get_template(template_name).render(**values).strip()
 
 
+class GenerationError(ValueError):
+    """Giữ phần câu trả lời đã nhận để eval lưu lại khi có lỗi."""
+
+    def __init__(self, message: str, answer: str, citations: list[str] | None = None):
+        super().__init__(message)
+        self.generation = {"answer": answer, "citations": citations or []}
+
+
 def build_answer(answer: str, kb_contexts: list[dict]) -> dict:
     """Tạo kết quả answer/citations, giữ thứ tự nguồn và loại trùng."""
     sources = {context["source"] for context in kb_contexts}
@@ -36,7 +44,7 @@ def build_answer(answer: str, kb_contexts: list[dict]) -> dict:
     citations = list(dict.fromkeys(re.findall(r"\[([^\[\]\r\n]+)\]", answer)))
     unknown = [label for label in citations if label not in sources]
     if unknown:
-        raise ValueError(f"Nhãn trích dẫn không có trong evidence: {unknown}")
+        raise GenerationError(f"Nhãn trích dẫn không có trong evidence: {unknown}", answer, citations)
     # Không tự thêm nguồn khi thiếu trích dẫn; groundedness sẽ đánh giá tiếp.
     return {"answer": answer, "citations": citations}
 
@@ -85,14 +93,18 @@ def generate(
         messages.append(("human", prompt))
         response = client.invoke(messages)
 
+        print("="*50)
         print("DONE REASONN: ", response.response_metadata.get("done_reason"))
-        print("EVAL COUNT: ", response.response_metadata.get("eval_count"))
+        # Số token đầu vào do Ollama báo cáo sau khi xử lý prompt.
+        print("INPUT TOKENS: ", response.response_metadata.get("prompt_eval_count", "N/A"))
+        print("OUTPUT TOKENS: ", response.response_metadata.get("eval_count"))
 
         result = response.content
-        print("RESPONSE: ", result)
+        # print("RESPONSE: ", result)
         # Text bị cắt vẫn đọc được nhưng chưa phải câu trả lời hoàn chỉnh.
         if response.response_metadata.get("done_reason") == "length":
-            raise ValueError("Đầu ra LLM bị cắt do đạt giới hạn token.")
+            raise GenerationError("Đầu ra LLM bị cắt do đạt giới hạn token.",
+                                  result if isinstance(result, str) else "")
 
     if not isinstance(result, str) or not result.strip():
         raise ValueError("The model returned an empty response")

@@ -79,11 +79,26 @@ class GenerationTests(unittest.TestCase):
                          {"answer": answer, "citations": ["vpn", "mail"]})
 
     def test_unknown_citation_is_generation_error(self):
-        result, calls = self.evaluate(["Làm như sau. [invented]"])
-        self.assertIsNone(result["generation"])
+        answer = "Làm như sau. [mail] [invented]"
+        result, calls = self.evaluate([answer, CORRECT, SUPPORTED])
+        self.assertEqual(result["generation"], {"answer": answer, "citations": ["mail", "invented"]})
         self.assertEqual(result["errors"][0]["stage"], "generation")
         self.assertIn("invented", result["errors"][0]["message"])
+        self.assertEqual(len(calls), 3)
+        self.assertIn("invented", calls[2].args[0])
+
+    def test_partial_answer_is_saved_without_judging(self):
+        result, calls = self.evaluate([llm_client.GenerationError("Đầu ra bị cắt", "Một phần answer")])
+        self.assertEqual(result["generation"]["answer"], "Một phần answer")
+        self.assertEqual(result["errors"][0]["stage"], "generation")
+        self.assertIsNone(result["correctness"])
         self.assertEqual(len(calls), 1)
+
+    def test_retrieval_error_does_not_reference_unassigned_answer(self):
+        with patch.object(harness, "get_connection", side_effect=RuntimeError("DB unavailable")):
+            result = harness.evaluate_ticket(TICKET, top_k=3)
+        self.assertIsNone(result["generation"])
+        self.assertEqual(result["errors"], [{"stage": "retrieval", "message": "DB unavailable"}])
 
     def test_missing_citations_are_not_invented(self):
         for answer in ("", "Kiểm tra mạng."):

@@ -13,14 +13,14 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
-from src.agent.llm_client import generate, render_prompt, build_answer
+from src.agent.llm_client import generate, render_prompt, build_answer, GenerationError
 from src.core.config import PROJECT_ROOT, get_settings
 from src.core.database import close_pool, get_connection
 from src.rag.retriever import retrieve_top_k_parents
 
 
 GENERATION_MODEL = "qwen3.5:4b"
-JUDGE_MODEL = "qwen3.5:4b"
+JUDGE_MODEL = "qwen3.5:2b"
 
 
 class CorrectnessReport(BaseModel):
@@ -58,6 +58,7 @@ def evaluate_ticket(ticket, top_k, num_ctx=32768):
     )}
     result.update(kb_contexts=[], generation=None, correctness=None, groundedness=None, errors=[])
     stage = "retrieval"
+    generated = None
     try:
         with get_connection() as conn:
             with conn.cursor() as cur:
@@ -72,10 +73,16 @@ def evaluate_ticket(ticket, top_k, num_ctx=32768):
             ticket_subject=ticket["category"], ticket_body=ticket["question"],
             category=ticket["category"], kb_contexts=result["kb_contexts"],
         )
+        # Lưu text trước khi kiểm tra nguồn để lỗi hậu xử lý không làm mất answer.
+        result["generation"] = {"answer": generated, "citations": []}   # Nếu là lỗi khác GenerationError vẫn sẽ log lại được answer
         result["generation"] = build_answer(generated, result["kb_contexts"])
     except Exception as exc:
+        if isinstance(exc, GenerationError):
+            result["generation"] = exc.generation
         result["errors"].append({"stage": stage, "message": str(exc)})
-        return result
+        # Chỉ chấm khi generate đã trả về đầy đủ. Text bị cắt được lưu để debug.
+        if generated is None:
+            return result
 
     answer = result["generation"]["answer"]
     if not answer.strip():
@@ -124,11 +131,18 @@ def summarize(results):
     }
 
 
-def run_evaluation(dataset, output, limit=0, num_ctx=32768):
+def run_evaluation(dataset, output, limit=0, num_ctx=32768, ticket_id=None):
     """Chạy tuần tự; cập nhật một file JSON sau mỗi ticket để giữ tiến độ."""
     tickets = json.loads(Path(dataset).read_text(encoding="utf-8-sig"))
     if not isinstance(tickets, list) or not tickets:
         raise ValueError("Dataset phải là danh sách ticket không rỗng.")
+    # Lọc ID trước limit để tìm được cả ticket nằm cuối dataset.
+    if ticket_id is not None:
+        tickets = [t for t in tickets if isinstance(t, dict) and t.get("id") == ticket_id]
+        if not tickets:
+            raise ValueError(f"Không tìm thấy ticket ID: {ticket_id}")
+        if len(tickets) > 1:
+            raise ValueError(f"Dataset có nhiều ticket cùng ID: {ticket_id}")
     if limit:
         tickets = tickets[:limit]
     for ticket in tickets:
@@ -167,8 +181,9 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", type=Path, default=PROJECT_ROOT / "eval/dataset/golden_dataset.json")
     parser.add_argument("--output", type=Path, default=PROJECT_ROOT / "eval/results" / f"eval_generation_{datetime.now():%Y%m%d_%H%M%S}.json")
     parser.add_argument("--limit", type=int, default=0, help="0: toàn bộ; số dương: chạy N ticket")
+    parser.add_argument("--ticket-id", help="Chỉ đánh giá ticket có ID khớp chính xác")
     parser.add_argument("--num-ctx", type=int, default=32768)
     args = parser.parse_args()
     if args.limit < 0 or args.num_ctx <= 2304:
         parser.error("--limit phải >= 0; --num-ctx phải > 2304.")
-    run_evaluation(args.dataset, args.output, args.limit, args.num_ctx)
+    run_evaluation(args.dataset, args.output, args.limit, args.num_ctx, ticket_id=args.ticket_id)
