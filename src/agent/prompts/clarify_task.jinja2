@@ -1,0 +1,2 @@
+{# User message. Required: ticket_subject, ticket_body, missing_fields (a nonempty list). #}
+{{ {"subject": ticket_subject, "body": ticket_body, "missing_fields": missing_fields} | tojson(indent=2) }}
