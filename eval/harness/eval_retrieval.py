@@ -281,6 +281,7 @@ def run_evaluation():
             retrieved = retrieve_top_k_parents(
                 cur, question, category, top_k=TOP_K, candidate_pool=CANDIDATE_POOL
             )
+            # Ngưỡng này vẫn dùng cosine; thứ tự kết quả nay là RRF.
             max_similarity = max((r["similarity"] for r in retrieved), default=0.0)
 
             if is_out_of_scope:

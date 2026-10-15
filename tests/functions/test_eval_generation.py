@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, patch
 
 from eval.harness import eval_generation as harness
 from src.agent import llm_client
+from src import confidence
 from src.agent.llm_client import build_answer
 
 TICKET = {
@@ -18,19 +19,30 @@ TICKET = {
 }
 ANSWER = "Tắt Work Offline. [mail]"
 CORRECT = {"verdict": "correct", "reason": "Đúng thao tác."}
-SUPPORTED = {"verdict": "supported", "reason": "Có căn cứ.",
-             "problematic_claims": [], "citation_support": "supported"}
+SUPPORTED = {"claims": [{"claim": "Tắt Work Offline.", "verdict": "supported",
+              "evidence": [{"source": "mail", "quote": "Tắt Work Offline."}]}],
+             "reason": "Có căn cứ.", "citation_support": "supported"}
+SETTINGS = SimpleNamespace(top_k=3, mistral_api_key=None, groundedness_model="qwen3.5:4b",
+                           mistral_model="mistral-small-latest", judge_num_ctx=32768,
+                           judge_max_tokens=4096, judge_seed=42)
 PARENTS = [{"article_title": "mail", "text": "Tắt Work Offline."}]
 REMOVED = {"citation_check", "confidence_score", "routing_decision", "raw_outputs", "latency_seconds"}
 
 
 class GenerationTests(unittest.TestCase):
+    def setUp(self):
+        client_settings = SimpleNamespace(openai_api_key=None, openai_model="test",
+            llm_timeout_seconds=10, ollama_host="http://localhost:11434", ollama_model="qwen3.5:4b")
+        patcher = patch.object(llm_client, "get_settings", return_value=client_settings)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def evaluate(self, outputs, ticket=TICKET):
         with patch.object(harness, "get_connection"), patch.object(
             harness, "retrieve_top_k_parents", return_value=PARENTS
         ), patch.object(harness, "generate", side_effect=[
             json.dumps(o) if isinstance(o, dict) else o for o in outputs
-        ]) as generate:
+        ]) as generate, patch.object(confidence, "generate", generate), patch.object(confidence, "get_settings", return_value=SETTINGS):
             result = harness.evaluate_ticket(ticket, top_k=5)
             return result, generate.call_args_list
 
@@ -46,7 +58,7 @@ class GenerationTests(unittest.TestCase):
         for i in (0, 2):
             self.assertNotIn("REFERENCE_SECRET", calls[i].args[0])
             self.assertNotIn("GOLD_SECRET", calls[i].args[0])
-        self.assertEqual([c.kwargs["model_name"] for c in calls], ["qwen3.5:4b"] * 3)
+        self.assertEqual([c.kwargs["model_name"] for c in calls], [harness.GENERATION_MODEL, harness.JUDGE_MODEL, SETTINGS.groundedness_model])
         self.assertNotEqual(calls[0].kwargs["system_prompt"], calls[1].kwargs["system_prompt"])
         self.assertNotEqual(calls[1].kwargs["system_prompt"], calls[2].kwargs["system_prompt"])
 
@@ -70,7 +82,25 @@ class GenerationTests(unittest.TestCase):
         summary = harness.summarize([good, bad])
         self.assertEqual(summary["answer_accuracy"], 0.5)
         self.assertEqual(summary["correctness_counts"]["unavailable"], 1)
+        self.assertEqual(summary["mean_groundedness"], 1.0)
+        self.assertEqual(summary["groundedness_unavailable_answers"], 1)
         self.assertIsNone(harness.summarize([])["answer_accuracy"])
+
+    def test_top_k_one_keeps_only_one_context_and_empty_retrieval_stops(self):
+        with patch.object(harness, "get_connection"), patch.object(
+            harness, "retrieve_top_k_parents", return_value=PARENTS * 2
+        ) as retrieve, patch.object(harness, "generate", return_value=ANSWER), patch.object(
+            harness, "evaluate_groundedness", return_value={"status": "ok"}
+        ) as judge:
+            result = harness.evaluate_ticket(TICKET | {"human_handoff": True}, top_k=1)
+            self.assertEqual(retrieve.call_args.args[-1], 2)
+            self.assertEqual(len(result["kb_contexts"]), 1)
+            self.assertEqual(judge.call_args.args[2], result["kb_contexts"])
+            retrieve.return_value = []
+            judge.reset_mock()
+            result = harness.evaluate_ticket(TICKET, top_k=1)
+            self.assertIsNone(result["generation"])
+            judge.assert_not_called()
 
     def test_citation_order_and_duplicates(self):
         contexts = [{"source": "mail"}, {"source": "vpn"}, {"source": "mail"}]
@@ -153,11 +183,13 @@ class GenerationTests(unittest.TestCase):
             dataset.write_text(json.dumps([TICKET]), encoding="utf-8")
             with patch.object(harness, "get_connection"), patch.object(
                 harness, "retrieve_top_k_parents", return_value=PARENTS
-            ), patch.object(harness, "generate", side_effect=[ANSWER, json.dumps(CORRECT), json.dumps(SUPPORTED)]), patch.object(harness, "close_pool"):
+            ), patch.object(harness, "generate", side_effect=[ANSWER + " [typo]", json.dumps(CORRECT), json.dumps(SUPPORTED)]) as generate, patch.object(harness, "close_pool"), patch.object(confidence, "generate", generate), patch.object(confidence, "get_settings", return_value=SETTINGS), patch.object(harness, "get_settings", return_value=SETTINGS):
                 harness.run_evaluation(dataset, output)
             report = json.loads(output.read_text(encoding="utf-8"))
             self.assertTrue(report["completed"])
             self.assertEqual(report["summary"]["answer_accuracy"], 1.0)
+            self.assertEqual(report["results"][0]["generation"]["answer"], ANSWER + " [typo]")
+            self.assertEqual(report["results"][0]["errors"][0]["stage"], "generation")
             self.assertFalse(REMOVED & report["results"][0].keys())
 
 

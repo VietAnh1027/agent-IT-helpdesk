@@ -2,6 +2,9 @@
 
 from pathlib import Path
 import re
+import json
+
+import httpx
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from langchain_ollama import ChatOllama
@@ -52,6 +55,7 @@ def build_answer(answer: str, kb_contexts: list[dict]) -> dict:
 def generate(
     prompt: str, *, system_prompt: str | None = None, model_name: str | None = None,
     num_ctx: int | None = None, response_schema: dict | None = None,
+    seed: int | None = None, max_tokens: int = 2048, provider: str = "auto",
 ) -> str:
     """Sinh câu trả lời với một client mới cho mỗi lần gọi.
 
@@ -61,13 +65,49 @@ def generate(
     """
     if not prompt.strip():
         raise ValueError("prompt must not be empty")
+    if provider not in ("auto", "mistral"):
+        raise ValueError("Unknown provider")
+    if type(max_tokens) is not int or max_tokens < 1:
+        raise ValueError("max_tokens must be a positive integer")
+    if num_ctx is not None:
+        # Tính cả schema và ngân sách output; không cắt evidence để vừa context.
+        prompt_bytes = len(((system_prompt or "") + prompt + json.dumps(response_schema or {})).encode("utf-8"))
+        if num_ctx <= prompt_bytes + max_tokens + 256:
+            raise ValueError("Context có thể không đủ; tăng num_ctx để giữ nguyên evidence.")
     if model_name is not None:
         model_name = model_name.strip()
         if not model_name:
             raise ValueError("model_name must not be blank")
 
     settings = get_settings()
-    if model_name is None and check_api_key(settings):
+    if provider == "mistral":
+        key = settings.mistral_api_key
+        if not key or not key.get_secret_value().strip():
+            raise ValueError("MISTRAL_API_KEY is not configured")
+        messages = [{"role": "user", "content": prompt}]
+        if system_prompt:
+            messages.insert(0, {"role": "system", "content": system_prompt})
+        request = {"model": model_name or settings.mistral_model, "messages": messages,
+                   "temperature": 0, "max_tokens": max_tokens, "stream": False}
+        if seed is not None:
+            request["random_seed"] = seed
+        if response_schema:
+            request["response_format"] = {"type": "json_schema", "json_schema": {
+                "name": "groundedness", "schema": response_schema, "strict": True,
+            }}
+        response = httpx.post("https://api.mistral.ai/v1/chat/completions", json=request,
+                              headers={"Authorization": f"Bearer {key.get_secret_value().strip()}"},
+                              timeout=settings.llm_timeout_seconds)
+        if response.is_error:
+            raise ValueError(f"Mistral HTTP {response.status_code}")
+        data = response.json()
+        choice = data["choices"][0]
+        result = choice["message"]["content"]
+        if choice["finish_reason"] != "stop":
+            raise GenerationError("Mistral response incomplete", result if isinstance(result, str) else "")
+        print("INPUT TOKENS: ", data.get("usage", {}).get("prompt_tokens", "N/A"))
+        print("OUTPUT TOKENS: ", data.get("usage", {}).get("completion_tokens", "N/A"))
+    elif model_name is None and check_api_key(settings):
         client = OpenAI(
             api_key=settings.openai_api_key.get_secret_value().strip(),
             timeout=settings.llm_timeout_seconds,
@@ -84,7 +124,8 @@ def generate(
             num_ctx=num_ctx,
             format=response_schema,
             temperature=0 if response_schema else 0.2,
-            num_predict=2048,
+            num_predict=max_tokens,
+            seed=seed,
             client_kwargs={"timeout": settings.llm_timeout_seconds},
         )
         messages = []

@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4.1-mini"
     ollama_model: str = "qwen3.5:4b"
     ollama_host: str = "http://localhost:11434"
+    mistral_api_key: SecretStr | None = None
+    mistral_model: str = "mistral-small-latest"
+    groundedness_model: str = "qwen3.5:4b"
+    judge_num_ctx: int = Field(default=32768, gt=0)
+    judge_max_tokens: int = Field(default=4096, gt=0)
+    judge_seed: int = 42
     llm_timeout_seconds: float = Field(default=120, gt=0)
     log_level: str = "INFO"
 
@@ -41,6 +47,8 @@ class Settings(BaseSettings):
     def validate_pool_size(self) -> "Settings":
         if self.db_pool_max < self.db_pool_min:
             raise ValueError("DB_POOL_MAX must be greater than or equal to DB_POOL_MIN")
+        if self.judge_num_ctx <= self.judge_max_tokens + 256:
+            raise ValueError("JUDGE_NUM_CTX must exceed JUDGE_MAX_TOKENS + 256")
         return self
 
     @property

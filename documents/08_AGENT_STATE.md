@@ -1,6 +1,6 @@
 # Thiết kế AgentState
 
-Ngày đối chiếu: 08/10/2026. Trạng thái: **đề xuất thiết kế, chưa triển khai class trong Python**.
+Ngày đối chiếu: 12/10/2026. Trạng thái: **đề xuất thiết kế, chưa triển khai class trong Python**.
 
 ## 1. Dự án đã có AgentState chưa?
 
@@ -10,7 +10,7 @@ Chưa có định nghĩa `AgentState` trong các file Markdown hoặc code ngu�
 - `03_DATA_MODEL.md` mô tả dữ liệu lưu trong DB; `06_TICKET_STATUS_LIFECYCLE.md` mô tả vòng đời ticket. Đây không phải state của một lượt chạy agent.
 - `05_CATEGORY_GRADUATION.md` có state của mức tự động hóa theo category; `07_TOOLS.md` có state độ tin cậy của tool. Chúng có vòng đời riêng.
 - `src/pipeline.py` hiện truyền dữ liệu qua biến cục bộ. `eval/harness/eval_generation.py` có dictionary `result` gần với một state, nhưng chứa thêm đáp án chuẩn và kết quả chấm offline.
-- `src/confidence.py` và `src/router.py` hiện chưa có implementation. Không coi các trường confidence/routing dưới đây là tính năng đã chạy được.
+- `src/confidence.py` đã có hàm hybrid-confidence và groundedness dùng chung; router và class AgentState vẫn chưa triển khai.
 
 ## 2. AgentState dùng để làm gì?
 
@@ -50,7 +50,7 @@ class AgentState:
     generation_complete: bool = False
     groundedness: dict | None = None
     groundedness_score: float | None = None
-    confidence_score: float | None = None
+    confidence: dict | None = None
 
     routing_decision: Literal["draft", "auto", "clarify", "escalate"] | None = None
     routing_reason: str | None = None
@@ -59,7 +59,7 @@ class AgentState:
 
 Quy ước:
 
-- `None`: chưa có kết quả hoặc không tính được; không thay bằng điểm `0` vì điểm 0 là một kết quả đánh giá.
+- `None`: chưa chạy. Groundedness thất bại trả score 0.0 kèm status unavailable; phân biệt với score 0.0 được chấm hợp lệ bằng status.
 - Danh sách rỗng: chưa có phần tử. Với retrieval, chỉ được hiểu là "không tìm thấy" sau khi hàm retrieval chạy thành công; lỗi retrieval phải có trong `errors`.
 - `default_factory=list` tạo danh sách riêng cho mỗi instance, tránh ticket sau dùng nhầm dữ liệu ticket trước.
 - `dataclass` và type hint không tự validate dữ liệu. Webhook, kết quả classify/judge và dữ liệu DB vẫn cần được kiểm tra ở điểm tiếp nhận bằng cơ chế validation hiện có.
@@ -85,19 +85,19 @@ Category runtime nên dùng tên trong prompt hiện tại: `VPN`, `PASSWORD`, `
 
 | Biến | Ý nghĩa | Nơi ghi |
 |---|---|---|
-| `retrieved_parents` | Danh sách parent do `retrieve_top_k_parents()` trả về, giữ nguyên thứ tự xếp hạng và các trường `parent_chunk_id`, `parent_index`, `text`, `article_title`, `similarity`. Giữ metadata để phân tích score và truy vết. | Retriever |
+| `retrieved_parents` | Danh sách fusion đầy đủ do `retrieve_hybrid_parents()` trả về, giữ nguyên thứ tự xếp hạng và các trường `parent_chunk_id`, `parent_index`, `text`, `article_title`, `similarity`, `dense_rank`, `bm25_rank`, `bm25_score`, `rrf_score`, `relevance_score`. Giữ metadata để phân tích score và truy vết. | Retriever |
 | `generation` | `None` khi chưa nhận được output; khi có output là `{"answer": str, "citations": list[str]}`. Text do `generate()` tạo, citations do `build_answer()` tách ra. | Generation và hậu xử lý |
 | `generation_complete` | `True` khi đã nhận đủ text; `False` nếu chưa sinh hoặc output bị cắt. Có text không đồng nghĩa generation đã hoàn tất hay nội dung đúng. | Wrapper generation |
-| `groundedness` | Kết quả judge đã validate: `verdict`, `reason`, `problematic_claims`, `citation_support`, theo schema eval hiện tại. Chỉ dựa trên ticket, answer và evidence thực sự đưa vào generation. | Groundedness judge |
-| `groundedness_score` | Điểm số 0–1 dùng cho confidence khi đã có cách chấm/chuyển đổi được kiểm chứng. Hiện judge trả verdict, chưa trả điểm này; mặc định `None`. | Bộ tính score, chưa triển khai |
-| `confidence_score` | Điểm tổng hợp 0–1 từ retrieval và groundedness, dùng cho routing sau các rule bắt buộc. Không phải xác suất câu trả lời đúng đã được hiệu chuẩn. | Confidence scorer, chưa triển khai |
+| `groundedness` | Kết quả judge đã validate: `claims`, `score`, `status`, `error`, `verdict`, `reason`, `problematic_claims`, `citation_support`. Chỉ dựa trên ticket, answer và evidence thực sự đưa vào generation. | Groundedness judge |
+| `groundedness_score` | Tỷ lệ claim supported trên tổng claim; fallback 0.0 khi unavailable. Đọc cùng groundedness.status; có thể bỏ field này để lấy trực tiếp groundedness.score. | Confidence scorer |
+| `confidence` | Kết quả calculate_confidence: c_retrieval, c_consensus, c_groundedness, c_rag, status và errors. C_RAG null khi retrieval unavailable. Không phải xác suất đúng đã hiệu chuẩn. | Confidence scorer |
 
 Không lưu thêm một bản evidence lớn trong `kb_contexts` của state. Khi render prompt, tạo dữ liệu tương thích với code hiện tại:
 
 ```python
 kb_contexts = [
     {"source": parent["article_title"], "content": parent["text"]}
-    for parent in state.retrieved_parents
+    for parent in state.retrieved_parents[:top_k]
 ]
 ```
 
@@ -109,16 +109,15 @@ Lưu ý tên trường: `source` trong prompt là nhãn trích dẫn lấy từ 
 
 ### Confidence: tránh lưu hai bản của cùng dữ liệu
 
-Hai đầu vào retrieval được tính từ `retrieved_parents`, chưa cần thành hai field riêng:
+Tính từ toàn bộ fusion trước khi cắt context:
 
-- `retrieval_similarity_top1`: similarity của parent đầu tiên sau khi dedupe theo parent.
-- `retrieval_score_gap`: top1 trừ top2 của hai parent khác nhau. Đây là quy ước đề xuất cần giữ nhất quán khi hiệu chỉnh ngưỡng; không trộn với gap giữa hai child cùng parent.
-- Không có kết quả: chặn generation theo policy. Chỉ có một parent: gap chưa xác định (`None`), không tự coi là gap lớn hay độ chắc chắn cao.
-- Cosine similarity và gap không mặc nhiên là xác suất. Scorer phải định nghĩa chuẩn hóa, xử lý thiếu dữ liệu và hiệu chỉnh trọng số trước khi kết hợp với groundedness.
+- `calculate_retrieval_confidence`: 0.7*S_top1 + 0.3*min(1, 2*margin), dùng RRF chuẩn hóa; một parent thì margin=0.
+- `calculate_consensus`: 1.0/0.75/0.5 theo rank Top-3/Top-5 của parent đầu fusion trong hai kênh.
+- `evaluate_groundedness`: một lần judge, supported/total; Mistral khi có key, nếu không Ollama. Không nhận golden.
+- `calculate_confidence`: trọng số 0.4/0.2/0.4, tái sử dụng groundedness đã tính.
+- Retrieval lỗi/rỗng: unavailable và C_RAG null. Judge lỗi: groundedness 0.0/unavailable và confidence degraded. Cấm auto khi degraded/unavailable hoặc citation chưa xác minh.
 
-`04_CONFIDENCE_EVAL_POLICY.md` và một số mô tả cũ vẫn dùng `llm_self_reported_confidence`. Thiết kế này theo hướng đã thống nhất sau đó: thay thành phần đó bằng groundedness; không đưa `self_reported_confidence` hay `needs_human_review` trở lại output của generator.
-
-Chưa chốt ánh xạ verdict sang điểm số. Không tự gán `supported = 1` rồi coi đó là độ tin cậy tuyệt đối. Khi thiếu score hoặc judge lỗi, không đủ điều kiện auto-reply.
+Chi tiết và giới hạn xem `04_CONFIDENCE_EVAL_POLICY.md`. Không thêm self_reported_confidence hoặc needs_human_review vào output generator.
 
 ### Routing và lỗi
 
@@ -139,7 +138,7 @@ Quyết định `auto` không có nghĩa đã gửi thành công. Chỉ cập nh
 3. **Retrieve:** gọi hàm retrieval dùng chung, ghi `retrieved_parents`. Không có evidence đủ ngưỡng thì route theo policy, không bịa câu trả lời.
 4. **Generate:** render prompt từ ticket và parent contexts; ghi answer ngay khi có output. Output bị cắt vẫn được lưu nhưng `generation_complete = False`.
 5. **Build answer:** bổ sung citations. Sai nhãn không xóa text; ghi lỗi. Text đầy đủ nhưng citation sai vẫn có thể được judge trong eval.
-6. **Groundedness/confidence:** chỉ chấm text hoàn chỉnh. Groundedness không thấy golden answer. Giữ `None` nếu chưa đánh giá được; không tự đổi lỗi thành score cao.
+6. **Groundedness/confidence:** chỉ chấm text hoàn chỉnh. Groundedness không thấy golden answer. Khi judge lỗi: score 0.0 kèm unavailable; confidence degraded. Khi retrieval lỗi: C_RAG null/unavailable.
 7. **Route:** rule bắt buộc có ưu tiên trên confidence. Citation chưa xác minh, text bị cắt hoặc judge lỗi không đủ điều kiện auto; có thể giữ draft cho IT hoặc escalate theo chính sách.
 8. **Persist/send:** chuyển các trường cần thiết sang DB và kết quả trả về. Không serialize toàn bộ state rồi gửi tất cả cho LLM hay người dùng.
 
@@ -180,7 +179,7 @@ Ví dụ trạng thái logic khi có lỗi nhãn nguồn:
     "citations": ["Dong_bo_email_outlock"]
   },
   "generation_complete": true,
-  "confidence_score": null,
+  "confidence": null,
   "errors": [
     {"stage": "generation", "message": "Nhãn trích dẫn không có trong evidence"}
   ]
@@ -191,7 +190,7 @@ Ví dụ trạng thái logic khi có lỗi nhãn nguồn:
 
 ## 8. Giới hạn và bước triển khai sau này
 
-- Tài liệu này chỉ thêm thiết kế, chưa sửa runtime, DB hoặc công thức confidence.
+- Class AgentState vẫn là thiết kế; module confidence và hybrid retriever đã triển khai, chưa tích hợp router hoặc auto-send.
 - Không lưu client ChatOllama/OpenAI, DB connection, API key, model embedding hoặc system prompt trong state. Các đối tượng đó thuộc dependency/config của ứng dụng.
 - Không cần `messages` tự cộng dồn hay checkpoint framework cho pipeline tuần tự hiện tại. Nếu sau này triển khai graph, chuyển hợp đồng dữ liệu này sang kiểu state mà framework hỗ trợ; không cần đổi nghiệp vụ chỉ vì đổi công cụ điều phối.
 - Khi triển khai class, kiểm tra tối thiểu: hai state không dùng chung list; lỗi citation giữ answer; output bị cắt không đi auto; golden data không lọt vào prompt generation; clarification không vượt một vòng.

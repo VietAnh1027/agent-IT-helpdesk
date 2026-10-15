@@ -15,6 +15,7 @@ from pydantic import BaseModel, ConfigDict
 
 from src.agent.llm_client import generate, render_prompt, build_answer, GenerationError
 from src.core.config import PROJECT_ROOT, get_settings
+from src.confidence import evaluate_groundedness
 from src.core.database import close_pool, get_connection
 from src.rag.retriever import retrieve_top_k_parents
 
@@ -27,14 +28,6 @@ class CorrectnessReport(BaseModel):
     model_config = ConfigDict(strict=True)
     verdict: Literal["correct", "incorrect", "uncertain"]
     reason: str
-
-
-class GroundednessReport(BaseModel):
-    model_config = ConfigDict(strict=True)
-    verdict: Literal["supported", "unsupported", "contradicted", "uncertain"]
-    reason: str
-    problematic_claims: list[str]
-    citation_support: Literal["supported", "unsupported", "uncertain"]
 
 
 def call_prompt(model_name, prompt_name, schema=None, num_ctx=32768, **values):
@@ -62,10 +55,12 @@ def evaluate_ticket(ticket, top_k, num_ctx=32768):
     try:
         with get_connection() as conn:
             with conn.cursor() as cur:
-                parents = retrieve_top_k_parents(cur, ticket["question"], ticket["category"], top_k)
+                parents = retrieve_top_k_parents(cur, ticket["question"], ticket["category"], max(top_k, 2))
+                if not parents:
+                    raise ValueError("Không tìm thấy KB hợp lệ")
         result["kb_contexts"] = [
             {"source": parent["article_title"], "content": parent["text"]}
-            for parent in parents
+            for parent in parents[:top_k]
         ]
         stage = "generation"
         generated = call_prompt(
@@ -98,17 +93,16 @@ def evaluate_ticket(ticket, top_k, num_ctx=32768):
             "ground_truth_answer": ticket["ground_truth_answer"],
             "ground_truth_contexts": ticket["ground_truth_contexts"],
         }))
-    # Groundedness chỉ thấy evidence generator thực sự nhận; không thấy đáp án
-    # chuẩn. Mỗi invoke là request mới, không mang lịch sử của lần chấm trước.
-    jobs.append(("groundedness", GroundednessReport, {
-        "question": ticket["question"], "answer": answer,
-        "citations": result["generation"]["citations"], "kb_contexts": result["kb_contexts"],
-    }))
     for stage, schema, values in jobs:
         try:
             result[stage] = call_prompt(JUDGE_MODEL, f"eval_{stage}", schema, num_ctx=num_ctx, **values)
         except Exception as exc:
             result["errors"].append({"stage": stage, "message": str(exc)})
+    result["groundedness"] = evaluate_groundedness(
+        ticket["question"], answer, result["kb_contexts"], num_ctx=num_ctx,
+    )
+    if result["groundedness"]["status"] != "ok":
+        result["errors"].append({"stage": "groundedness", "message": result["groundedness"]["error"]})
     return result
 
 
@@ -119,7 +113,12 @@ def summarize(results):
     correctness = Counter((r["correctness"] or {}).get("verdict", "unavailable") for r in answerable)
     groundedness = Counter((r["groundedness"] or {}).get("verdict", "unavailable") for r in answered)
     assessed = sum(groundedness[v] for v in ("supported", "unsupported", "contradicted"))
+    valid_grounding = [r["groundedness"] for r in results
+                       if r["groundedness"] and r["groundedness"].get("status") == "ok"]
     return {
+        "mean_groundedness": sum(g["score"] for g in valid_grounding) / len(valid_grounding) if valid_grounding else None,
+        "groundedness_scored_answers": len(valid_grounding),
+        "groundedness_unavailable_answers": len(results) - len(valid_grounding),
         "total_tickets": len(results), "answerable_tickets": len(answerable),
         # Lỗi và uncertain vẫn nằm trong mẫu số accuracy; không loại để tăng điểm.
         "answer_accuracy": correctness["correct"] / len(answerable) if answerable else None,
@@ -161,6 +160,7 @@ def run_evaluation(dataset, output, limit=0, num_ctx=32768, ticket_id=None):
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
     report = {"generation_model": GENERATION_MODEL, "judge_model": JUDGE_MODEL,
+              "groundedness_model": settings.mistral_model if settings.mistral_api_key and settings.mistral_api_key.get_secret_value().strip() else settings.groundedness_model,
               "selected_tickets": len(tickets), "completed": False, "summary": {}, "results": []}
     try:
         for index, ticket in enumerate(tickets, 1):

@@ -15,6 +15,8 @@ try:
     user_problem = input("Input your ticket: ")
     cate_problem = input("Category: ")
     chunks = retrieve_top_k_parents(cur, user_problem, cate_problem, settings.top_k)
+    if not chunks:
+        raise ValueError("Không tìm thấy KB hợp lệ; chuyển IT xử lý.")
     kb_contexts = [
         {"source": chunk["article_title"], "content": chunk["text"]}
         for chunk in chunks

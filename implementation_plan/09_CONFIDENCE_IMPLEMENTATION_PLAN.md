@@ -1,6 +1,6 @@
 # Implementation plan — Hybrid retrieval và confidence
 
-Ngày: 11/10/2026. **Kế hoạch để duyệt; chưa triển khai code chức năng.**
+Ngày: 11/10/2026. Cập nhật 12/10/2026: **đã triển khai chức năng và kiểm thử offline; kiểm chứng live/calibration còn phụ thuộc dịch vụ local.**
 
 ## 1. Phạm vi và quyết định đã chốt
 
@@ -63,7 +63,7 @@ BM25 đọc/chấm toàn bộ corpus đã lọc mỗi request: phù hợp KB nh�
 
 ## 4. Các hàm confidence và groundedness
 
-Đặt trong `src/confidence.py` hiện đang trống; không tạo package scorer mới.
+Đặt trong `src/confidence.py`; không tạo package scorer mới.
 
 | Hàm dự kiến                     | Đầu vào                                                 | Kết quả                                 |
 | ---------------------------------- | ---------------------------------------------------------- | ----------------------------------------- |
@@ -108,7 +108,7 @@ Score số học không tự quyết định auto. Chưa triển khai router, nh
 | `src/agent/prompts/eval_groundedness_system.jinja2`, `eval_groundedness_task.jinja2` | Chuyển sang claim-based judge, dùng chung cả runtime và eval; prompt tiếng Anh                    |
 | `eval/harness/eval_generation.py`                                                      | Import judge dùng chung, bỏ schema/logic grounding trùng lặp; correctness giữ riêng              |
 | `eval/harness/eval_retrieval.py`                                                       | Kiểm tra caller theo hybrid; giữ cosine riêng cho metric cũ, không dùng ngưỡng cosine lên RRF |
-| `eval/harness/test_eval_generation.py` và một file kiểm thử confidence/hybrid nhỏ | Cập nhật fixture và kiểm tra logic mới                                                            |
+| `tests/functions/test_eval_generation.py` và `tests/functions/test_confidence.py` | Cập nhật fixture và kiểm tra logic mới                                                            |
 | `documents/04_CONFIDENCE_EVAL_POLICY.md`, `08_AGENT_STATE.md`                        | Đồng bộ công thức mới, trọng số, fallback và trạng thái unavailable                         |
 
 Không thay judge correctness hiện tại chỉ vì đổi judge groundedness. Không đổi provider của generation hoặc xóa các chỉnh sửa riêng của người dùng.
@@ -125,12 +125,13 @@ Không thay judge correctness hiện tại chỉ vì đổi judge groundedness. 
 
 ## 7. Thứ tự triển khai và kiểm thử
 
-1. Viết/test các hàm RRF và phép tính score thuần trước.
-2. Thêm BM25, gom parent và metadata; test union kết quả, lọc category/active, tie-break, BM25 rỗng và lỗi kênh.
-3. Thêm judge/schema/prompt, validate evidence, tính groundedness và fallback bằng phản hồi mock.
-4. Nối eval với hàm dùng chung, sửa fixture và kiểm tra JSON vẫn giữ answer khi lỗi.
-5. Đồng bộ docs; chạy kiểm thử local không cần DB/model trước.
-6. Khi có DB/Ollama hoạt động: smoke test một ticket, sau đó so sánh các case TC_SYNC_002/009 và case nhiều sự cố với baseline. Ghi rõ kiểm thử live nào thực sự đã chạy; không tự ingest lại KB.
+1. Tất cả các file test chức năng sẽ được lưu vào tests/functions
+2. Viết/test các hàm RRF và phép tính score thuần trước.
+3. Thêm BM25, gom parent và metadata; test union kết quả, lọc category/active, tie-break, BM25 rỗng và lỗi kênh.
+4. Thêm judge/schema/prompt, validate evidence, tính groundedness và fallback bằng phản hồi mock.
+5. Nối eval với hàm dùng chung, sửa fixture và kiểm tra JSON vẫn giữ answer khi lỗi.
+6. Đồng bộ docs; chạy kiểm thử local không cần DB/model trước.
+7. Khi có DB/Ollama hoạt động: smoke test một ticket, sau đó so sánh các case TC_SYNC_002/009 và case nhiều sự cố với baseline. Ghi rõ kiểm thử live nào thực sự đã chạy; không tự ingest lại KB.
 
 Các kiểm tra bắt buộc:
 
@@ -154,3 +155,28 @@ Các kiểm tra bắt buộc:
 - Các ngưỡng routing cũ chưa được hiệu chỉnh cho công thức mới; đợt này không bật tự động gửi dựa trên chúng.
 
 **Tiêu chí hoàn tất:** các hàm import được, hai kênh retrieval thực sự độc lập, công thức đúng theo thỏa thuận, lỗi không bị che bằng score hợp lệ, eval tái sử dụng judge và giữ answer, kiểm thử đạt; không thêm hệ thống ngoài phạm vi trên.
+
+## 9. Kết quả triển khai và cách sử dụng
+
+Các hàm BM25/RRF/hybrid ở retriever; score và judge ở confidence; eval dùng lại judge. Tests chức năng đều nằm trong `tests/functions`. Không thay DB/ingest hoặc bật auto-send.
+
+```python
+from src.rag.retriever import retrieve_hybrid_parents
+from src.confidence import (calculate_retrieval_confidence, calculate_consensus,
+                            evaluate_groundedness, calculate_confidence)
+
+parents = retrieve_hybrid_parents(cur, question, category)
+if not parents:
+    result = calculate_confidence(None, None, {}, retrieval_error="No KB")
+else:
+    contexts = [{"source": p["article_title"], "content": p["text"]}
+                for p in parents[:top_k]]
+    # answer là text hoàn chỉnh đã generate từ chính contexts ở trên.
+    grounding = evaluate_groundedness(question, answer, contexts)
+    result = calculate_confidence(calculate_retrieval_confidence(parents),
+                                  calculate_consensus(parents[0]), grounding)
+```
+
+Caller bắt lỗi retrieval để ghi unavailable; không dùng kết quả một kênh thay thế âm thầm. Eval vẫn lưu answer khi citation sai. Context guard bảo thủ theo byte UTF-8 cộng schema/output; có thể từ chối prompt thực tế vừa context, nhưng không cắt evidence âm thầm.
+
+Kiểm tra dịch vụ ngày 12/10/2026: Ollama ConnectError; PostgreSQL OperationalError. Chưa thể chạy live TC_SYNC_002/009 hoặc đối chiếu baseline và chưa xác minh nhãn judge bằng người. Bộ test mock không chứng minh chất lượng semantic hoặc latency thực tế.

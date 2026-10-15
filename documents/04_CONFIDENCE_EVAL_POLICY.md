@@ -4,21 +4,42 @@
 
 Doc này định nghĩa: (1) cách tính điểm tin cậy, (2) ngưỡng để quyết định draft / auto-reply / escalate, (3) cách đo chất lượng hệ thống bằng eval set, (4) các trigger escalate bắt buộc.
 
-## 2. Công thức tính Confidence Score (đề xuất khởi điểm)
+## 2. Công thức confidence đã triển khai
 
-```
-confidence = w1 * retrieval_similarity_top1
-           + w2 * retrieval_score_gap (top1 - top2, càng lớn càng chắc chắn đúng nguồn)
-           + w3 * llm_self_reported_confidence (prompt LLM tự chấm 0-1)
+```text
+relevance_score(d) = (1/(60+dense_rank) + 1/(60+bm25_rank)) / (2/61)
+# Kênh không có parent này đóng góp 0; rank bắt đầu từ 1.
+S_top1 = relevance_score của parent đầu fusion
+margin = S_top1 - S_top2; bằng 0 nếu chỉ có một parent
+C_retrieval = 0.7*S_top1 + 0.3*min(1, 2*margin)
+C_consensus = 1.00 nếu parent đầu fusion thuộc Top-3 cả hai kênh
+              0.75 nếu thuộc Top-5 cả hai kênh, chưa đạt mức trên
+              0.50 trong các trường hợp còn lại khi hai kênh thành công
+C_groundedness = số claim supported / tổng số claim kiểm chứng được
+C_RAG = 0.4*C_retrieval + 0.2*C_consensus + 0.4*C_groundedness
 ```
 
-Gợi ý trọng số khởi điểm: w1 = 0.5, w2 = 0.2, w3 = 0.3 — **đây chỉ là điểm khởi đầu, cần calibrate lại bằng eval set thật**, đừng để cố định mãi. Việc đo lại và điều chỉnh trọng số chính là phần thể hiện tư duy engineering trong CV.
+Dense và BM25 chạy trên cùng corpus child hợp lệ theo category/active, độc lập chọn candidate. Mỗi kênh gom parent theo điểm child tốt nhất rồi lấy 20 parent; RRF hợp nhất theo parent ID. Giữ top-2 trước khi cắt context ngay cả khi generation chỉ dùng top_k=1. `similarity` vẫn là cosine, `relevance_score` là RRF chuẩn hóa. Không dùng hệ số nguồn hay self-reported confidence.
+
+Groundedness gọi một judge riêng bằng Mistral khi `MISTRAL_API_KEY` có giá trị, nếu không dùng Ollama `qwen3.5:4b`. Settings chung: `MISTRAL_MODEL` (mistral-small-latest), `GROUNDEDNESS_MODEL`, `JUDGE_NUM_CTX` (32768), `JUDGE_MAX_TOKENS` (4096), `JUDGE_SEED` (42). Không fallback sang provider khác khi request lỗi. Judge không thấy golden answer, chỉ thấy question, answer và toàn bộ evidence thực sự dùng để generation.
+
+Judge tách claim và cung cấp verdict cùng quote/source chính xác. Python kiểm tra schema, claim trùng văn bản, nguồn và quote, rồi đếm; unsupported/contradicted/uncertain đóng góp 0. Citation được kiểm tra riêng. Seed cố định và temperature 0 tăng tính lặp lại, không bảo đảm đánh giá ngữ nghĩa deterministic. Quote tồn tại không chứng minh entailment; cần kiểm tra nhãn bằng người.
+
+| Trường hợp | Kết quả |
+|---|---|
+| Judge hợp lệ có claim | score 0–1, status ok |
+| Judge lỗi, quote sai, không claim, answer rỗng/bị cắt, context vượt ngân sách | score 0.0, status unavailable, giữ error |
+| Retrieval hợp lệ nhưng grounding unavailable | C_RAG dùng fallback 0.0, status degraded, không đủ điều kiện auto |
+| Retrieval lỗi hoặc không parent | C_RAG null, status unavailable; chặn generation |
+| Citation chưa xác minh hoặc có claim contradicted | Giữ answer; confidence degraded dù có điểm số |
+
+Module `src/confidence.py` đã triển khai; router chưa triển khai. Caller phải đọc status/errors, không chỉ điểm số. Điểm RRF phản ánh thứ hạng, không phải xác suất đúng. Các ngưỡng dưới đây chưa được hiệu chỉnh cho công thức mới, chưa dùng để bật auto-send.
 
 ## 3. Ngưỡng xử lý (threshold routing)
 
 | Confidence                                                  | Điều kiện thêm                                                                                                                                             | Hành động                                                                                                                                                                                                                                                                                                                                                                 |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ≥ 0.85                                                     | —                                                                                                                                                             | Đủ điều kiện Auto-reply*nếu* category đang ở stage `auto` (xem cơ chế tự động promote/demote category ở `05_CATEGORY_GRADUATION.md`). Kể cả khi đủ điều kiện, 1 phần nhỏ ticket vẫn được lấy mẫu ngẫu nhiên (canary) đi qua Draft mode thay vì auto-gửi, để duy trì tín hiệu giám sát chất lượng — chi tiết ở cùng doc |
+| ≥ 0.85                                                     | —                                                                                                                                                             | Chỉ xét khi confidence status = ok, không có guardrail/lỗi citation và đủ điều kiện Auto-reply *nếu* category đang ở stage `auto` (xem cơ chế tự động promote/demote category ở `05_CATEGORY_GRADUATION.md`). Kể cả khi đủ điều kiện, 1 phần nhỏ ticket vẫn được lấy mẫu ngẫu nhiên (canary) đi qua Draft mode thay vì auto-gửi, để duy trì tín hiệu giám sát chất lượng — chi tiết ở cùng doc |
 | 0.6 – 0.85                                                 | —                                                                                                                                                             | Tạo Draft, chờ người duyệt                                                                                                                                                                                                                                                                                                                                              |
 | 0.4 – 0.6                                                  | AI xác định thiếu thông tin cụ thể (thiếu trường bắt buộc theo category, VD: hệ điều hành, mã lỗi)**và** `clarification_rounds = 0` | Sinh 1 câu hỏi làm rõ, gửi public reply, chuyển`status = awaiting_clarification`, tăng `clarification_rounds` lên 1                                                                                                                                                                                                                                              |
 | < 0.4, hoặc (0.4–0.6 nhưng`clarification_rounds ≥ 1`) | —                                                                                                                                                             | Escalate, không sinh câu trả lời cho end-user, chỉ ghi log nội bộ                                                                                                                                                                                                                                                                                                     |
@@ -56,7 +77,7 @@ Các trường hợp sau **luôn escalate ngay lập tức**, không qua LLM ans
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Retrieval Recall@5            | % ticket mà KB article đúng nằm trong top-5 kết quả retrieval                                                                                                                       |
 | Answer Accuracy               | So sánh draft answer với golden_answer, có thể chấm tay hoặc dùng LLM-as-judge (ghi rõ phương pháp nào được dùng, không giấu)                                           |
-| Hallucination Rate            | % câu trả lời có confidence cao nhưng nội dung sai/không khớp golden_answer —**chỉ số quan trọng nhất, phải báo cáo riêng**                                        |
+| Hallucination Rate            | Trong harness: (unsupported + contradicted) / số verdict supported, unsupported, contradicted. Đây là ungrounded answer rate; báo riêng uncertain/unavailable. Sai so với golden thuộc correctness.                                        |
 | Draft Approval Rate           | Từ bảng`review_actions`: % approved_as_is trên tổng draft                                                                                                                           |
 | Escalation Precision/Recall   | Trong các case đáng lẽ phải escalate (theo eval set gán sẵn), hệ thống có escalate đúng không                                                                                |
 | Latency                       | Thời gian trung bình từ nhận ticket đến có draft                                                                                                                                   |
@@ -76,3 +97,9 @@ Các trường hợp sau **luôn escalate ngay lập tức**, không qua LLM ans
 - [ ] Test với ít nhất 10 ticket adversarial (prompt injection, câu hỏi ngoài scope ngụy trang)
 - [ ] Test với ticket cố tình chứa thông tin nhạy cảm giả lập, xác nhận hệ thống escalate đúng
 - [ ] Xác nhận không có trường hợp nào confidence cao mà câu trả lời sai trong eval set (nếu có, phải hạ threshold hoặc cải thiện retrieval trước khi tiếp tục)
+
+## 9. Hợp đồng eval hiện tại
+
+`groundedness` chứa claims, score, status, error, verdict, reason, problematic_claims và citation_support. Mean groundedness chỉ tính status ok, kể cả score 0 hợp lệ. `groundedness_unavailable_answers` đếm tất cả ticket chưa có phép chấm hợp lệ, bao gồm lỗi trước generation. Accuracy dùng mọi ticket answerable làm mẫu số. Không thêm lại confidence_score/routing_decision/raw_outputs/latency_seconds/citation_check vào JSON eval.
+
+Kiểm thử: `python -m unittest discover -s tests/functions -v`. Hướng dẫn import và giới hạn trong `tests/functions/README.md` và `09_CONFIDENCE_IMPLEMENTATION_PLAN.md`.
