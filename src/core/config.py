@@ -5,6 +5,7 @@ from pathlib import Path
 
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Literal
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -30,18 +31,20 @@ class Settings(BaseSettings):
     embedding_dim: int = Field(default=1024, ge=1)
     embedding_batch_size: int = Field(default=16, ge=1)
     top_k: int = Field(default=5, ge=1)
-    openai_api_key: SecretStr | None = None
-    openai_model: str = "gpt-4.1-mini"
     ollama_model: str = "qwen3.5:4b"
     ollama_host: str = "http://localhost:11434"
-    mistral_api_key: SecretStr | None = None
-    mistral_model: str = "mistral-small-latest"
+    openrouter_api_key: SecretStr | None = None
+    openrouter_model: str = "mistralai/mistral-small-24b-instruct-2501"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
     groundedness_model: str = "qwen3.5:4b"
     judge_num_ctx: int = Field(default=32768, gt=0)
-    judge_max_tokens: int = Field(default=4096, gt=0)
+    judge_max_tokens: int = Field(default=5120, gt=0)
     judge_seed: int = 42
     llm_timeout_seconds: float = Field(default=120, gt=0)
     log_level: str = "INFO"
+    # "full": tính c_retrieval + c_consensus + c_groundedness (gọi judge).
+    # "lite": chỉ c_retrieval + c_consensus, không gọi judge — nhanh hơn, ít thông tin hơn.
+    confidence_mode: Literal["full", "lite"] = "full"
 
     @model_validator(mode="after")
     def validate_pool_size(self) -> "Settings":
@@ -54,6 +57,9 @@ class Settings(BaseSettings):
     @property
     def db_connect_kwargs(self) -> dict[str, str | int]:
         """Keyword arguments accepted by psycopg2, including the unwrapped password."""
+        # Ví dụ dict kết nối (giá trị giả): {"host": "localhost", "port": 5432,
+        # "dbname": "helpdesk", "user": "app", "password": "<mật khẩu>"}.
+        # password đã được giải bọc SecretStr ở đây; không log dict này.
         return {
             "host": self.db_host,
             "port": self.db_port,

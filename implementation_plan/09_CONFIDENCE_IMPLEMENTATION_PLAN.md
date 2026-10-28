@@ -2,6 +2,8 @@
 
 Ngày: 11/10/2026. Cập nhật 12/10/2026: **đã triển khai chức năng và kiểm thử offline; kiểm chứng live/calibration còn phụ thuộc dịch vụ local.**
 
+> **Lịch sử:** mô tả citations/citation_support đã được thay thế ngày 15/10/2026. Phần groundedness evidence `{source, quote}` tiếp tục được thay thế ngày 21/10/2026 bằng `context_id` ngắn, có giới hạn số claim/evidence và được Python ánh xạ về metadata nguồn. Chính sách hiện hành nằm trong `../documents/04_CONFIDENCE_EVAL_POLICY.md`. Công thức retrieval/confidence vẫn giữ nguyên.
+
 ## 1. Phạm vi và quyết định đã chốt
 
 - Dense Vector + BM25 truy vấn độc lập trên cùng tập KB hợp lệ; hợp nhất bằng RRF.

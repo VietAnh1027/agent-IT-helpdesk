@@ -1,0 +1,11 @@
+[run]
+branch = True
+source =
+    src.rag.retriever
+    src.confidence
+    src.agent.llm_client
+
+[report]
+fail_under = 100
+show_missing = True
+skip_covered = True

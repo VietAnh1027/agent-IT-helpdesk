@@ -1,6 +1,8 @@
 # Kế hoạch: backend quản lý nguồn, LLM chỉ sinh câu trả lời
 
-Ngày: 15/10/2026. **Trạng thái: chờ duyệt, chưa triển khai code.**
+Ngày: 15/10/2026. **Trạng thái: đã duyệt và triển khai code ngày 15/10/2026. Các mục dưới mô tả phạm vi triển khai; kết quả xác minh ghi ở mục 11.**
+
+> **Cập nhật 21/10/2026:** thiết kế backend sources của generation vẫn còn hiệu lực. Phần groundedness evidence `{source, quote}` trong kế hoạch này đã được thay thế bằng `context_id` ngắn, có giới hạn số claim/evidence và được Python ánh xạ về metadata nguồn. Chính sách hiện hành nằm trong `../documents/04_CONFIDENCE_EVAL_POLICY.md`.
 
 ## 1. Mục tiêu và lý do
 
@@ -210,7 +212,7 @@ Các đường dẫn dưới đây tương đối với `D:/python-workspace/age
 | `documents/03_DATA_MODEL.md`, `ai_responses.cited_kb_chunk_ids` | Ghi rõ trường thiết kế cũ trỏ child không được điền bằng parent ID hoặc gọi là nguồn đã dùng; mapping persistence sẽ xử lý ở đợt tích hợp DB, không migrate trong đợt này |
 | `documents/04_CONFIDENCE_EVAL_POLICY.md`, groundedness/fallback/auto condition và hợp đồng eval | Bỏ citation_support và điều kiện citation inline; vẫn giữ các guardrail khác |
 | `documents/08_AGENT_STATE.md`, generation/groundedness/errors và ví dụ JSON | Đổi answer/citations thành answer/sources; không còn invalid_citation như lỗi generator; vẫn giữ thiết kế state chưa triển khai |
-| `documents/09_CONFIDENCE_IMPLEMENTATION_PLAN.md`, các mục citation | Thêm ghi chú hợp đồng nguồn được thay thế bởi kế hoạch 10; giữ lịch sử quyết định cũ rõ ràng |
+| `implementation_plan/09_CONFIDENCE_IMPLEMENTATION_PLAN.md`, các mục citation | Thêm ghi chú hợp đồng nguồn được thay thế bởi kế hoạch 10; giữ lịch sử quyết định cũ rõ ràng |
 | `workflow.md`, node sinh draft + trích dẫn | Ghi rõ LLM sinh answer, backend đính kèm nguồn |
 | `to-do-flow.md`, bước generation | Cập nhật trách nhiệm nguồn của backend |
 | `tests/functions/README.md` | Hướng dẫn schema mới, tests nguồn, ý nghĩa nguồn và giới hạn |
@@ -287,3 +289,9 @@ TC_SYNC_003 vẫn có thể lỗi quote hoặc trả lời sai trọng tâm: đ�
 - Không thêm DB migration, dependency hoặc tính năng ngoài phạm vi.
 
 **Giới hạn:** sources chứng minh provenance của context, không chứng minh entailment của từng câu. Việc bỏ citation gate không cải thiện tự động chất lượng answer, tính đúng của judge hoặc mức an toàn của routing.
+
+## 11. Ghi nhận triển khai
+
+Runtime, hai harness, prompt và tests đã dùng schema v2. PRD 01 được làm rõ ý nghĩa nguồn để nhất quán với kiến trúc 02. Data model 03 giữ trường audit child, chưa migrate hoặc tích hợp ghi DB. AgentState 08 vẫn là thiết kế chưa triển khai class. Kế hoạch 09 giữ lịch sử v1 với thông báo thay thế, không dùng làm hợp đồng citation hiện tại. Không sửa các JSON eval cũ.
+
+Xác minh ngày 15/10/2026: 32 tests trong tests/functions pass; hai CLI --help pass; git diff --check pass. Kiểm tra dịch vụ: Ollama ConnectError, PostgreSQL OperationalError; chưa chạy live TC_SYNC_001/002/003, chưa kết luận chất lượng answer/judge cải thiện.

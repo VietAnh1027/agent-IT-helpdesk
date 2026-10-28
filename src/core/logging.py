@@ -13,6 +13,8 @@ _ticket_id: ContextVar[str | None] = ContextVar("ticket_id", default=None)
 
 class TicketContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
+        # record là LogRecord, không phải dict: ví dụ record.levelname="INFO", record.msg="Retrieved";
+        # filter bổ sung record.ticket_id="TC_SYNC_001" (hoặc "-" ngoài context).
         record.ticket_id = _ticket_id.get() or "-"
         return True
 

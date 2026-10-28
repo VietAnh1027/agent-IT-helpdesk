@@ -17,21 +17,21 @@ TICKET = {
     "ground_truth_answer": "REFERENCE_SECRET",
     "ground_truth_contexts": [{"source_doc": "mail.pdf", "evidence_text": "GOLD_SECRET"}],
 }
-ANSWER = "Tắt Work Offline. [mail]"
+ANSWER = "Tắt Work Offline."
 CORRECT = {"verdict": "correct", "reason": "Đúng thao tác."}
 SUPPORTED = {"claims": [{"claim": "Tắt Work Offline.", "verdict": "supported",
-              "evidence": [{"source": "mail", "quote": "Tắt Work Offline."}]}],
-             "reason": "Có căn cứ.", "citation_support": "supported"}
-SETTINGS = SimpleNamespace(top_k=3, mistral_api_key=None, groundedness_model="qwen3.5:4b",
-                           mistral_model="mistral-small-latest", judge_num_ctx=32768,
+              "evidence": [{"context_id": "E1"}]}],
+             "reason": "Có căn cứ."}
+SETTINGS = SimpleNamespace(top_k=3, openrouter_api_key=None, groundedness_model="qwen3.5:4b",
+                           openrouter_model="openrouter-test", judge_num_ctx=32768,
                            judge_max_tokens=4096, judge_seed=42)
-PARENTS = [{"article_title": "mail", "text": "Tắt Work Offline."}]
+PARENTS = [{"parent_chunk_id": "p1", "article_title": "mail", "text": "Tắt Work Offline."}]
 REMOVED = {"citation_check", "confidence_score", "routing_decision", "raw_outputs", "latency_seconds"}
 
 
 class GenerationTests(unittest.TestCase):
     def setUp(self):
-        client_settings = SimpleNamespace(openai_api_key=None, openai_model="test",
+        client_settings = SimpleNamespace(openrouter_api_key=None, openrouter_model="openrouter-test",
             llm_timeout_seconds=10, ollama_host="http://localhost:11434", ollama_model="qwen3.5:4b")
         patcher = patch.object(llm_client, "get_settings", return_value=client_settings)
         patcher.start()
@@ -49,7 +49,7 @@ class GenerationTests(unittest.TestCase):
     def test_prompts_and_reference_isolation(self):
         result, calls = self.evaluate([ANSWER, CORRECT, SUPPORTED])
         self.assertFalse(result["errors"])
-        self.assertEqual(result["generation"], {"answer": ANSWER, "citations": ["mail"]})
+        self.assertEqual(result["generation"], {"answer": ANSWER, "sources": [{"parent_chunk_id": "p1", "title": "mail"}], "complete": True})
         self.assertIsNone(calls[0].kwargs["response_schema"])
         self.assertIsNotNone(calls[1].kwargs["response_schema"])
         self.assertIsNotNone(calls[2].kwargs["response_schema"])
@@ -102,26 +102,32 @@ class GenerationTests(unittest.TestCase):
             self.assertIsNone(result["generation"])
             judge.assert_not_called()
 
-    def test_citation_order_and_duplicates(self):
-        contexts = [{"source": "mail"}, {"source": "vpn"}, {"source": "mail"}]
-        answer = "Bước 1. [vpn] Bước 2. [mail] Bước 3. [vpn]"
-        self.assertEqual(build_answer(answer, contexts),
-                         {"answer": answer, "citations": ["vpn", "mail"]})
+    def test_sources_order_dedupe_and_validation(self):
+        contexts = [{"parent_chunk_id": "p1", "source": "mail"},
+                    {"parent_chunk_id": "p2", "source": "mail"}]
+        answer = "Text [invented]"
+        output = build_answer(answer, contexts + contexts[:1])
+        self.assertEqual(output, {"answer": answer, "sources": [
+            {"parent_chunk_id": "p1", "title": "mail"}, {"parent_chunk_id": "p2", "title": "mail"}]})
+        self.assertEqual(build_answer("", []), {"answer": "", "sources": []})
+        for bad in ([{}], [{"parent_chunk_id": " ", "source": "mail"}],
+                    contexts + [{"parent_chunk_id": "p1", "source": "other"}]):
+            with self.assertRaises(ValueError):
+                build_answer(answer, bad)
 
-    def test_unknown_citation_is_generation_error(self):
-        answer = "Làm như sau. [mail] [invented]"
-        result, calls = self.evaluate([answer, CORRECT, SUPPORTED])
-        self.assertEqual(result["generation"], {"answer": answer, "citations": ["mail", "invented"]})
-        self.assertEqual(result["errors"][0]["stage"], "generation")
-        self.assertIn("invented", result["errors"][0]["message"])
+    def test_labels_do_not_create_sources(self):
+        result, calls = self.evaluate(["Text [invented]", CORRECT, SUPPORTED])
+        self.assertEqual(result["generation"]["sources"], [{"parent_chunk_id": "p1", "title": "mail"}])
+        self.assertFalse(result["errors"])
         self.assertEqual(len(calls), 3)
-        self.assertIn("invented", calls[2].args[0])
 
     def test_partial_answer_is_saved_without_judging(self):
         result, calls = self.evaluate([llm_client.GenerationError("Đầu ra bị cắt", "Một phần answer")])
         self.assertEqual(result["generation"]["answer"], "Một phần answer")
         self.assertEqual(result["errors"][0]["stage"], "generation")
         self.assertIsNone(result["correctness"])
+        self.assertFalse(result["generation"]["complete"])
+        self.assertEqual(len(result["generation"]["sources"]), 1)
         self.assertEqual(len(calls), 1)
 
     def test_retrieval_error_does_not_reference_unassigned_answer(self):
@@ -130,11 +136,11 @@ class GenerationTests(unittest.TestCase):
         self.assertIsNone(result["generation"])
         self.assertEqual(result["errors"], [{"stage": "retrieval", "message": "DB unavailable"}])
 
-    def test_missing_citations_are_not_invented(self):
-        for answer in ("", "Kiểm tra mạng."):
-            self.assertEqual(build_answer(answer, [{"source": "mail"}])["citations"], [])
-        result, calls = self.evaluate(["Kiểm tra mạng.", CORRECT, SUPPORTED])
-        self.assertEqual(result["generation"]["citations"], [])
+    def test_plain_answer_has_backend_sources(self):
+        result, calls = self.evaluate([ANSWER, CORRECT, SUPPORTED])
+        self.assertEqual(len(result["generation"]["sources"]), 1)
+        self.assertNotIn("citations", result["generation"])
+        self.assertNotIn("citation_support", result["groundedness"])
         self.assertEqual(len(calls), 3)
 
     def test_truncated_text_is_rejected(self):
@@ -151,31 +157,37 @@ class GenerationTests(unittest.TestCase):
         first.invoke.return_value.content = "first"
         second.invoke.return_value.content = "second"
         with patch.object(llm_client, "ChatOllama", side_effect=[first, second]) as constructor, patch.object(
-            llm_client, "OpenAI"
-        ) as openai, patch.object(llm_client, "check_api_key", return_value=True):
+            llm_client, "_openrouter_generate"
+        ) as openrouter, patch.object(llm_client, "check_api_key", return_value=False):
             self.assertEqual(llm_client.generate("task", model_name="qwen3.5:4b", system_prompt="generator"), "first")
             self.assertEqual(llm_client.generate("task", model_name="qwen3.5:4b", system_prompt="judge"), "second")
         self.assertEqual(constructor.call_count, 2)
-        openai.assert_not_called()
+        openrouter.assert_not_called()
         first.invoke.assert_called_once_with([("system", "generator"), ("human", "task")])
         second.invoke.assert_called_once_with([("system", "judge"), ("human", "task")])
 
     def test_default_provider_behavior(self):
-        settings = SimpleNamespace(openai_api_key=MagicMock(), openai_model="test-gpt",
+        settings = SimpleNamespace(openrouter_api_key=MagicMock(), openrouter_model="openrouter-test",
                                    llm_timeout_seconds=10, ollama_host="http://localhost:11434",
                                    ollama_model="default-local")
         with patch.object(llm_client, "get_settings", return_value=settings), patch.object(
             llm_client, "check_api_key", return_value=True
-        ), patch.object(llm_client, "OpenAI") as openai, patch.object(llm_client, "ChatOllama") as ollama:
-            openai.return_value.responses.create.return_value.output_text = "cloud"
-            self.assertEqual(llm_client.generate("task"), "cloud")
+        ), patch.object(llm_client, "_openrouter_generate", return_value="cloud") as cloud_gen, patch.object(llm_client, "ChatOllama") as ollama:
+            self.assertEqual(llm_client.generate("task", use_cloud_model=True), "cloud")
             ollama.assert_not_called()
+            cloud_gen.assert_called_once()
         with patch.object(llm_client, "get_settings", return_value=settings), patch.object(
             llm_client, "check_api_key", return_value=False
         ), patch.object(llm_client, "ChatOllama") as ollama:
             ollama.return_value.invoke.return_value.content = "local"
             self.assertEqual(llm_client.generate("task"), "local")
             self.assertEqual(ollama.call_args.kwargs["model"], "default-local")
+            import warnings
+            with warnings.catch_warnings(record=True) as recorded:
+                warnings.simplefilter("always")
+                self.assertEqual(llm_client.generate("task", use_cloud_model=True), "local")
+                self.assertEqual(len(recorded), 1)
+                self.assertIn("OPENROUTER_API_KEY", str(recorded[0].message))
 
     def test_json_report(self):
         with TemporaryDirectory(dir=Path(__file__).resolve().parent) as directory:
@@ -189,7 +201,8 @@ class GenerationTests(unittest.TestCase):
             self.assertTrue(report["completed"])
             self.assertEqual(report["summary"]["answer_accuracy"], 1.0)
             self.assertEqual(report["results"][0]["generation"]["answer"], ANSWER + " [typo]")
-            self.assertEqual(report["results"][0]["errors"][0]["stage"], "generation")
+            self.assertFalse(report["results"][0]["errors"])
+            self.assertEqual(report["schema_version"], 2)
             self.assertFalse(REMOVED & report["results"][0].keys())
 
 

@@ -40,6 +40,8 @@ def get_connection() -> Iterator[PgConnection]:
     conn = pool.getconn()
     try:
         try:
+            # Ví dụ sử dụng: with get_connection() as conn: ...; conn là psycopg2 connection,
+            # không phải list row. conn.cursor().fetchall() mới trả list[tuple] theo SELECT.
             yield conn
             conn.commit()
         except BaseException:
