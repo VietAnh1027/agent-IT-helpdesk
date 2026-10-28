@@ -177,6 +177,8 @@ def compute_cumulative_coverage(retrieved_parents: list[dict], evidence_list: li
         if ev_len == 0:
             continue
 
+        # Ví dụ covered_indices={0, 1, 2, 3}: vị trí ký tự trong evidence chuẩn hóa,
+        # không phải ID chunk. Set giúp vùng giao nhau của hai chunk không bị đếm hai lần.
         covered_indices = set()
         ev_doc_stem = Path(ev["source_doc"]).stem
 
@@ -205,9 +207,13 @@ def compute_metrics(retrieved_parents: list[dict], evidence_list: list[dict]):
     - ap: Average Precision@K (thưởng điểm cao khi các chunk đúng nằm ở Rank 1, 2).
     - mrr: 1.0 / rank của chunk đúng đầu tiên trong Top-K.
     """
+    # Input ví dụ (chỉ các trường được dùng): retrieved_parents=[{"article_title": "mail",
+    # "text": "Tắt Outlook."}], evidence_list=[{"source_doc": "mail.pdf", "evidence_text": "Tắt Outlook."}].
+    # Ví dụ khớp đầy đủ → output tuple (1.0, 1.0, 1.0, 1.0); ap có thể None khi không có chunk.
     k = len(retrieved_parents)
 
     # 1. Xác định relevant_chunk cho từng vị trí rank
+    # Ví dụ sau khi match: relevant_chunk=[False, True, True] theo thứ tự rank 1, 2, 3; MRR=1/2.
     relevant_chunk = [False] * k
     for chunk_idx, chunk in enumerate(retrieved_parents):
         for ev in evidence_list:
@@ -281,6 +287,7 @@ def run_evaluation():
             retrieved = retrieve_top_k_parents(
                 cur, question, category, top_k=TOP_K, candidate_pool=CANDIDATE_POOL
             )
+            # Ngưỡng này vẫn dùng cosine; thứ tự kết quả nay là RRF.
             max_similarity = max((r["similarity"] for r in retrieved), default=0.0)
 
             if is_out_of_scope:
@@ -322,6 +329,9 @@ def run_evaluation():
 
     conn.close()
 
+    # Ví dụ một row (rút gọn): {"id": "TC_SYNC_001", "hit_rate_at_k": 1.0,
+    # "recall_coverage_at_k": 0.8, "ap_at_k": 0.5, "mrr_at_k": 0.5, "out_of_scope_case": False}.
+    # DataFrame có mỗi ticket một hàng; None ở metric không áp dụng có thể được pandas biểu diễn thành NaN.
     df = pd.DataFrame(per_sample_rows)
     in_scope = df[df["out_of_scope_case"] == False]  # noqa: E712
     out_of_scope = df[df["out_of_scope_case"] == True]  # noqa: E712

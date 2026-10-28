@@ -46,7 +46,7 @@ Dự án này xây một AI agent đọc ticket, tra cứu KB, và **soạn câu
 ## 5. User Stories
 
 - Là end user, tôi gửi ticket mô tả vấn đề IT, và nhận được câu trả lời nhanh nếu thuộc loại đã hỗ trợ.
-- Là IT Agent, tôi thấy draft câu trả lời AI đề xuất kèm nguồn trích dẫn từ KB, có thể duyệt nguyên văn hoặc sửa trước khi gửi.
+- Là IT Agent, tôi thấy draft câu trả lời AI đề xuất kèm danh sách tài liệu KB đã cung cấp cho AI (backend đính kèm; không khẳng định từng câu đã được nguồn hỗ trợ), có thể duyệt nguyên văn hoặc sửa trước khi gửi.
 - Là IT Agent, tôi thấy ticket bị AI từ chối xử lý (do không đủ tin cậy hoặc ngoài phạm vi) được gắn cờ rõ ràng kèm lý do.
 - Là chủ hệ thống, tôi xem được dashboard số liệu: tỷ lệ tự động hóa, tỷ lệ duyệt nguyên văn, tỷ lệ escalate.
 

@@ -1,6 +1,4 @@
-
 ---
-
 ## PHẦN 1: Đánh giá cấu trúc thư mục hiện tại
 
 ```text
@@ -31,9 +29,7 @@ agent-IT-helpdesk/
 * **Integrations:** Chưa có chỗ đặt Zendesk Webhook/API Client, Mock SMTP / Mailbox sync theo `07_TOOLS.md`.
 * **Background Jobs:** Chưa có chỗ cho cronjob Category Graduation (`05_CATEGORY_GRADUATION.md`) và Incident Broadcast.
 * **Deployment / Hạ tầng:** Chưa có `docker-compose.yml` (Postgres pgvector, Ollama, Redis nếu cần) để đảm bảo tính tái lập.
-
 ---
-
 ## PHẦN 2: Đề xuất cấu trúc thư mục lý tưởng
 
 Cấu trúc dưới đây áp dụng mô hình **Modular Monolith** kết hợp **Service-Oriented Architecture** chuẩn cho các hệ thống AI Agent Production:
@@ -79,7 +75,7 @@ agent-IT-helpdesk/
 │   │
 │   ├── agent/                          # Bộ não ra quyết định và quy trình AI
 │   │   ├── __init__.py
-│   │   ├── llm_client.py               # Wrapper kết nối Ollama (Llama 3.2 3B / Qwen 2.5)
+│   │   ├── llm_client.py               # Wrapper kết nối LLM model
 │   │   ├── prompts/                    # Quản lý prompt templates tập trung
 │   │   │   ├── classify.jinja2
 │   │   │   ├── clarify.jinja2
@@ -187,7 +183,7 @@ flowchart TD
     RET -->|"Lọc category cứng + Cosine search"| PARENT["Lấy Parent chunk làm ngữ cảnh"]
     PARENT --> TOOL{"Cần gọi Tool?"}
     TOOL -->|"Có"| EXEC["src/agent/tools/executor.py\nÉp email = tickets.requester_email"]
-    TOOL -->|"Không"| GEN["src/agent/llm_client.py\nSinh draft + trích dẫn"]
+    TOOL -->|"Không"| GEN["src/agent/llm_client.py\nLLM sinh draft; backend đính kèm nguồn context"]
     EXEC --> GEN
   
     GEN --> CONF["src/agent/confidence.py"]
