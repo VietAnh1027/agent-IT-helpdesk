@@ -16,6 +16,7 @@ class AgentState:
     """
 
     ticket_id: str
+    requester_email: str = ""
     subject: str = ""
     body: str = ""
 
@@ -40,10 +41,17 @@ class AgentState:
 
     # 4. Trạng thái Category Automation & Vận hành (theo 05_CATEGORY_GRADUATION.md)
     automation_stage: str | None = None  # "shadow" | "draft" | "auto"
-    auto_enabled: bool = False
     canary_selected: bool | None = None
     is_reopened: bool = False
     repeat_ticket_suspected: bool = False
+
+    # 5. Tương đồng & Sự cố diện rộng (theo 02_ARCHITECTURE.md & 03_DATA_MODEL.md)
+    incident_id: str | None = None
+    is_spam_duplicate: bool = False
+    recurring_issue: bool = False
+
+    # 6. Dữ liệu chẩn đoán từ Read-only Tools (theo 07_TOOLS.md)
+    diagnostic_data: dict | None = None
 
     def add_error(self, stage: str, message: str) -> None:
         """Ghi nhận lỗi vào state mà không xóa câu trả lời đã sinh."""

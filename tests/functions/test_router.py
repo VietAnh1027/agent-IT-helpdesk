@@ -55,11 +55,15 @@ class AgentStateTests(unittest.TestCase):
         self.assertIsNone(state.routing_decision)
         self.assertIsNone(state.routing_reason)
         self.assertEqual(state.errors, [])
-        self.assertFalse(state.auto_enabled)
         self.assertIsNone(state.automation_stage)
         self.assertIsNone(state.canary_selected)
         self.assertFalse(state.is_reopened)
         self.assertFalse(state.repeat_ticket_suspected)
+        self.assertEqual(state.requester_email, "")
+        self.assertIsNone(state.incident_id)
+        self.assertFalse(state.is_spam_duplicate)
+        self.assertFalse(state.recurring_issue)
+        self.assertIsNone(state.diagnostic_data)
 
     def test_state_list_isolation_between_instances(self):
         """Đảm bảo default_factory tạo list độc lập, không dùng chung bộ nhớ giữa 2 ticket."""
@@ -89,7 +93,6 @@ class RouterEscalationTriggersTests(unittest.TestCase):
             generation={"answer": "Hướng dẫn cụ thể.", "sources": [{"parent_chunk_id": "p1", "title": "VPN Guide"}]},
             generation_complete=True,
             confidence=make_confidence(score=0.90, status="ok"),
-            auto_enabled=True,
             automation_stage="auto",
         )
 
@@ -167,7 +170,6 @@ class RouterThresholdRoutingTests(unittest.TestCase):
             retrieved_parents=[make_parent()],
             generation={"answer": "Vào portal để đổi.", "sources": [{"parent_chunk_id": "p1", "title": "VPN Guide"}]},
             generation_complete=True,
-            auto_enabled=False,
             automation_stage="draft",
         )
 
@@ -242,7 +244,6 @@ class RouterAutoAndCanaryTests(unittest.TestCase):
             generation={"answer": "Mở FortiClient và nhập vpn.company.com", "sources": [{"parent_chunk_id": "p1", "title": "VPN Guide"}]},
             generation_complete=True,
             confidence=make_confidence(score=0.92, status="ok"),
-            auto_enabled=True,
             automation_stage="auto",
         )
 
@@ -255,7 +256,6 @@ class RouterAutoAndCanaryTests(unittest.TestCase):
 
     def test_draft_when_category_not_in_auto_stage(self):
         """Đạt điểm >= 0.85 nhưng category đang ở draft mode -> draft."""
-        self.base_state.auto_enabled = False
         self.base_state.automation_stage = "draft"
         routed = route_ticket(self.base_state)
         self.assertEqual(routed.routing_decision, "draft")

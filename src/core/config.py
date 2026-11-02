@@ -46,6 +46,22 @@ class Settings(BaseSettings):
     # "lite": chỉ c_retrieval + c_consensus, không gọi judge — nhanh hơn, ít thông tin hơn.
     confidence_mode: Literal["full", "lite"] = "full"
 
+    # Similarity Subsystem & Duplicate / Incident Detection
+    # Cửa sổ thời gian (phút) phát hiện spam dồn dập từ cùng 1 email
+    similarity_spam_window_minutes: int = Field(default=5, ge=1)
+    # Cửa sổ thời gian (ngày) kiểm tra câu hỏi lặp lại chưa xử lý dứt điểm (repeat-unresolved)
+    similarity_repeat_window_days: int = Field(default=7, ge=1)
+    # Ngưỡng cosine similarity để coi là cùng 1 vấn đề hỏi lại (>= 0.85 -> Escalate)
+    similarity_repeat_threshold: float = Field(default=0.85, ge=0.0, le=1.0)
+    # Cửa sổ thời gian trượt (phút) để gom nhóm các ticket sự cố diện rộng (mass incident)
+    similarity_incident_window_minutes: int = Field(default=30, ge=1)
+    # Ngưỡng cosine similarity giữa các ticket khác người gửi để xem xét cùng 1 sự cố
+    similarity_incident_threshold: float = Field(default=0.82, ge=0.0, le=1.0)
+    # Số ticket tối thiểu từ các user khác nhau trong cửa sổ để chính thức kích hoạt tạo Incident
+    similarity_incident_min_tickets: int = Field(default=5, ge=2)
+    # Ngưỡng cosine similarity với ticket đã closed trong quá khứ để gắn cờ lỗi tái phát (recurring)
+    similarity_recurring_threshold: float = Field(default=0.88, ge=0.0, le=1.0)
+
     @model_validator(mode="after")
     def validate_pool_size(self) -> "Settings":
         if self.db_pool_max < self.db_pool_min:

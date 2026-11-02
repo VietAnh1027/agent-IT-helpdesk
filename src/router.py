@@ -26,7 +26,7 @@ def _check_escalation_triggers(state: AgentState) -> str | None:
 
     # 1. Classifier gắn out_of_scope
     cat = str(cls.get("category", "")).casefold()
-    if cat in ("out_of_scope", "out-of-scope") or cls.get("out_of_scope") is True:
+    if cat in ("out_of_scope", "out-of-scope"):
         return "out_of_scope"
 
     # 2. Nghi ngờ đa vấn đề
@@ -42,7 +42,7 @@ def _check_escalation_triggers(state: AgentState) -> str | None:
         return "sentiment_angry"
 
     # 5. Từ khóa bảo mật / nghi ngờ hack / khóa tài khoản
-    if cls.get("security_concern") is True or cls.get("security_flag") is True:
+    if cls.get("security_concern") is True:
         return "security_concern"
 
     if check_fast_security_concern(state.subject, state.body):
@@ -142,9 +142,8 @@ def route_ticket(
         state.routing_reason = "confidence_degraded"
         return state
 
-    # Kiểm tra category đã graduate lên stage 'auto' chưa
-    is_auto_stage = state.auto_enabled or str(state.automation_stage).casefold() == "auto"
-    if not is_auto_stage:
+    # Kiểm tra category đã graduate lên stage 'auto' chưa (nguồn duy nhất: automation_stage)
+    if str(state.automation_stage).casefold() != "auto":
         state.routing_decision = "draft"
         state.routing_reason = "category_not_in_auto_stage"
         return state
