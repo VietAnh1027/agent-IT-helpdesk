@@ -163,6 +163,8 @@ def parse_metadata_and_clean(raw_text: str):
         "date_created": date_created,
     }
     cleaned_content = "\n".join(remaining_lines).strip()
+    # Ví dụ output tuple: ({"category": "MAIL", "is_active": True,
+    # "date_created": date(2026, 9, 22)}, "Nội dung sau metadata"). date_created là datetime.date, không phải str.
     return metadata, cleaned_content
 
 
@@ -237,6 +239,8 @@ def get_embedding_model():
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
+    # Ví dụ texts=["Child A", "Child B"] → [[0.01, -0.02, ...], [0.03, 0.04, ...]].
+    # Mỗi hàng là vector của texts[i]; mỗi vector có EMBEDDING_DIM phần tử float.
     if not texts:
         return []
     model = get_embedding_model()
@@ -258,6 +262,8 @@ def find_existing_article(cur, title: str):
         "SELECT id, content_hash FROM kb_articles WHERE title = %s;",
         (title,),
     )
+    # Output là (article_id, content_hash), ví dụ ("uuid-article", "a1b2..."), hoặc None nếu chưa có.
+    # Đây là tuple theo thứ tự SELECT, không phải {"id": ..., "content_hash": ...}.
     return cur.fetchone()
 
 
@@ -321,6 +327,8 @@ def insert_chunks(cur, article_id, category, parent_child_list):
             continue
 
         # 2. Embed toàn bộ child text của parent này 1 lượt (đỡ overhead gọi model nhiều lần)
+        # group ví dụ: {"parent_index": 0, "parent_text": "Đoạn lớn", "children": ["Child A", "Child B"]}.
+        # zip bên dưới ghép ("Child A", vector_A), ("Child B", vector_B), giữ đúng thứ tự.
         child_embeddings = embed_texts(group["children"])
 
         # 3. Insert từng child row, trỏ về parent_id vừa tạo

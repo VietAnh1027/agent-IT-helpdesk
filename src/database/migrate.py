@@ -53,6 +53,8 @@ def check_env():
 # Thứ tự bắt buộc theo phụ thuộc khóa ngoại (xem ghi chú cạnh từng bảng).
 # ---------------------------------------------------------------------------
 
+# list[tuple[str, str]]: [("Tên bước", "CREATE TABLE ...;"), ...].
+# Mỗi tuple là nhãn log và một chuỗi SQL, không phải record dữ liệu trong DB.
 STATEMENTS = [
     # --- Extensions ---
     ("Bật extension pgvector", """

@@ -66,7 +66,7 @@ CHECK (
 
 **Index**: ANN index (`ivfflat`/`hnsw`) chỉ nên là **partial index** (`WHERE parent_chunk_id IS NOT NULL`) — chỉ index các row child có embedding, tránh lãng phí và tránh vô tình match phải parent row (vốn không có embedding nên thực ra không match được, nhưng partial index vẫn nên làm để tối ưu kích thước index).
 
-> **Cách dùng trong retrieval (hybrid search)**: query similarity trên `kb_chunks.embedding` **kèm điều kiện lọc cứng** `WHERE parent_chunk_id IS NOT NULL AND category = :ticket_category AND is_active = true` trước khi rank theo cosine similarity — đây là điểm khác so với thiết kế trước (chỉ similarity thuần), giúp tránh nhầm giữa 2 bài viết nội dung gần giống nhau nhưng khác category/đã lỗi thời. Sau khi tìm được child chunk khớp nhất, lấy `parent_chunk_id` để `SELECT content FROM kb_chunks WHERE id = :parent_chunk_id` lấy đoạn lớn làm context đưa cho LLM — không đưa thẳng child (thường quá ngắn) vào prompt. Trích dẫn nguồn cho end-user/IT Agent xem thì hiển thị theo `kb_article_id` gốc, không cần lộ chi tiết parent/child.
+> **Cách dùng trong retrieval (hybrid search)**: query similarity trên `kb_chunks.embedding` **kèm điều kiện lọc cứng** `WHERE parent_chunk_id IS NOT NULL AND category = :ticket_category AND is_active = true` trước khi rank theo cosine similarity — đây là điểm khác so với thiết kế trước (chỉ similarity thuần), giúp tránh nhầm giữa 2 bài viết nội dung gần giống nhau nhưng khác category/đã lỗi thời. Sau khi tìm được child chunk khớp nhất, lấy `parent_chunk_id` để `SELECT content FROM kb_chunks WHERE id = :parent_chunk_id` lấy đoạn lớn làm context đưa cho LLM — không đưa thẳng child (thường quá ngắn) vào prompt. Backend hiện đính kèm nguồn context cấp parent trong `generation.sources`; giao diện tương lai có thể nhóm theo bài viết. Danh sách này không chứng minh từng claim được hỗ trợ.
 
 ## 5. Bảng `ai_responses`
 
@@ -75,7 +75,7 @@ CHECK (
 | id | UUID (PK) | |
 | ticket_id | UUID (FK) | |
 | draft_text | text | Câu trả lời AI sinh ra |
-| cited_kb_chunk_ids | UUID[] | Trỏ tới `kb_chunks.id` của các **child row** (chunk thực sự match qua similarity search) — bắt buộc có, dùng để trace lại parent content + article gốc khi cần hiển thị/audit |
+| cited_kb_chunk_ids | UUID[] | Thiết kế persistence: trỏ tới `kb_chunks.id` của các **child row** match, phục vụ audit; không phải citation do LLM tạo. Runtime/harness chưa ghi trường này và chưa trả child ID. Phải bổ sung mapping khi tích hợp persistence; tuyệt đối không điền parent ID từ `generation.sources` vào đây |
 | retrieval_top_k_scores | jsonb | Lưu lại điểm similarity của top-k để phân tích sau |
 | confidence_score | float | |
 | model_used | text | Tên/version model tại thời điểm sinh |

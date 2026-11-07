@@ -1,0 +1,2 @@
+{# User message. Required: ticket_subject, ticket_body. #}
+{{ {"subject": ticket_subject, "body": ticket_body} | tojson(indent=2) }}
