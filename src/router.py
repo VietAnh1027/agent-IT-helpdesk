@@ -24,29 +24,29 @@ def _check_escalation_triggers(state: AgentState) -> str | None:
     """
     cls = state.classification or {}
 
-    # 1. Classifier gắn out_of_scope
-    cat = str(cls.get("category", "")).casefold()
-    if cat in ("out_of_scope", "out-of-scope"):
-        return "out_of_scope"
-
-    # 2. Nghi ngờ đa vấn đề
-    if cls.get("multi_issue_suspected") is True:
-        return "multi_issue_suspected"
-
-    # 3. Nghi ngờ prompt injection
-    if cls.get("prompt_injection_suspected") is True:
-        return "prompt_injection_suspected"
-
-    # 4. Khách hàng giận dữ
-    if str(cls.get("sentiment_flag", "")).casefold() == "angry":
-        return "sentiment_angry"
-
-    # 5. Từ khóa bảo mật / nghi ngờ hack / khóa tài khoản
+    # 1. Từ khóa bảo mật / nghi ngờ hack / khóa tài khoản (ưu tiên an ninh cao nhất)
     if cls.get("security_concern") is True:
         return "security_concern"
 
     if check_fast_security_concern(state.subject, state.body):
         return "security_concern"
+
+    # 2. Nghi ngờ prompt injection (bảo vệ hệ thống AI)
+    if cls.get("prompt_injection_suspected") is True:
+        return "prompt_injection_suspected"
+
+    # 3. Khách hàng giận dữ
+    if str(cls.get("sentiment_flag", "")).casefold() == "angry":
+        return "sentiment_angry"
+
+    # 4. Nghi ngờ đa vấn đề
+    if cls.get("multi_issue_suspected") is True:
+        return "multi_issue_suspected"
+
+    # 5. Classifier gắn out_of_scope
+    cat = str(cls.get("category", "")).casefold()
+    if cat in ("out_of_scope", "out-of-scope"):
+        return "out_of_scope"
 
     # 6. Ticket reopened (đã auto_sent/closed nhưng có comment mới)
     if state.is_reopened:
@@ -56,8 +56,8 @@ def _check_escalation_triggers(state: AgentState) -> str | None:
     if state.repeat_ticket_suspected:
         return "repeat_ticket"
 
-    # 8. Retrieval không tìm được chunk hợp lệ
-    if not state.retrieved_parents:
+    # 8. Retrieval không tìm được chunk hợp lệ (chỉ áp dụng khi không trong luồng clarify)
+    if not state.missing_fields and not state.retrieved_parents:
         return "retrieval_unavailable"
 
     return None
@@ -82,6 +82,16 @@ def route_ticket(
     if trigger_reason is not None:
         state.routing_decision = "escalate"
         state.routing_reason = trigger_reason
+        return state
+
+    # 1.5. Xử lý Clarify khi có missing_fields (bỏ qua kiểm tra confidence)
+    if state.missing_fields:
+        if state.clarification_rounds >= 1:
+            state.routing_decision = "escalate"
+            state.routing_reason = "clarification_rounds_exceeded"
+        else:
+            state.routing_decision = "clarify"
+            state.routing_reason = "needs_clarification"
         return state
 
     # 2. Kiểm tra Confidence Record & Status
